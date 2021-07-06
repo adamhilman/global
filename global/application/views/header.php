@@ -202,7 +202,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="<?php echo base_url()?>" class="nav-link">
+            <a href="<?php echo base_url()?>admin/project" class="nav-link">
               <i class="nav-icon fa fa-file"></i>
               <p>
                 Project
@@ -223,6 +223,15 @@
               <p>
                 Formulir Cuti
                 <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+          </li>
+          <li class="nav-header">Project Detail</li>
+          <li class="nav-item">
+            <a href="<?php echo base_url()?>" class="nav-link">
+              <i class="nav-icon fa fa-calendar"></i>
+              <p>
+                Project A
               </p>
             </a>
           </li>
