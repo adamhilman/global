@@ -30,18 +30,37 @@
 <script src="<?php echo base_url()?>assets/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
 <script src="<?php echo base_url()?>assets/plugins/datatables-buttons/js/buttons.print.min.js"></script>
 <script src="<?php echo base_url()?>assets/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+<!-- dropzonejs -->
+<script src="<?php echo base_url() ?>assets/plugins/dropzone/min/dropzone.min.js"></script>
 <!-- AdminLTE App -->
 <script src="<?php echo base_url()?>assets/dist/js/adminlte.min.js"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="<?php echo base_url()?>assets/dist/js/demo.js"></script>
 <!-- Page specific script -->
 <script>
+Dropzone.autoDiscover = false;
+var project_upload= new Dropzone(".dropzone", {
+  url: "<?php echo base_url()?>admin/upload_file_project",
+  method: "POST",
+  paramName: "file_project",
+  addRemoveLinks: true
+});
+
+project_upload.on("sending", function(a,b,c){
+  a.token=Math.random();
+  c.append("token_file",a.token);
+});
+
   $(function () {
     $("#example1").DataTable({
       "responsive": true, "lengthChange": false, "autoWidth": false,
       "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
     }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
   });
+
+$('#simpan_file').click(function() {
+    location.reload();
+});
 </script>
 </body>
 </html>

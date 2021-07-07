@@ -44,6 +44,7 @@
                                           <th>Nilai Kontrak</th>
                                           <th>Lokasi</th>
                                           <th>CSS grade</th>
+                                          <th>Aksi</th>
                                       </tr>
                                   </thead>
                                   <tbody>
@@ -56,6 +57,7 @@
                                           <td>Win 95+</td>
                                           <td> 4</td>
                                           <td>X</td>
+                                          <td><a href="<?php base_url()?>detail_project/">Detail</td>
                                       </tr>
                                   </tbody>
                               </table>
