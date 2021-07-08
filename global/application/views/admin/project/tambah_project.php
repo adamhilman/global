@@ -18,7 +18,7 @@
 
       <!-- Main content -->
       <section class="content">
-          <form action="#">
+          <form action="<?php echo base_url()?>admin/add_project" method="POST">
               <div class="row">
                   <div class="col-md-12">
                       <div class="card card-primary">
@@ -35,7 +35,7 @@
                                   <div class="col-sm-6">
                                       <div class="form-group">
                                           <label for="nama_paket">Nama Paket Pekerjaan</label>
-                                          <textarea id="nama_paket" class="form-control" rows="5"></textarea>
+                                          <textarea id="nama_paket" name="nama_paket" class="form-control" rows="5"></textarea>
                                       </div>
                                   </div>
                                   <div class="col-sm-6">
@@ -88,12 +88,12 @@
                                   </div>
                                   <div class="col-sm-3">
                                       <div class="form-group">
-                                          <label for="inputStatus">BA Serah Terima</label>
-                                          <select id="inputStatus" class="form-control custom-select">
+                                          <label for="serah_terima">BA Serah Terima</label>
+                                          <select id="inputStatus" name="serah_terima" class="form-control custom-select">
                                               <option selected disabled>Select one</option>
-                                              <option>Selesai</option>
-                                              <option>Proses</option>
-                                              <option>Ditahan</option>
+                                              <option value="0">Selesai</option>
+                                              <option value="1">Proses</option>
+                                              <option value="2">Ditahan</option>
                                           </select>
                                       </div>
                                   </div>

@@ -48,9 +48,10 @@
                                       </tr>
                                   </thead>
                                   <tbody>
+                                  <?php foreach ($project as $p) : ?>
                                       <tr>
                                       <td>1</td>
-                                          <td>Trident</td>
+                                          <td><?php echo $p->nama_paket?></td>
                                           <td>Internet
                                               Explorer 4.0
                                           </td>
@@ -59,6 +60,7 @@
                                           <td>X</td>
                                           <td><a href="<?php base_url()?>detail_project/">Detail</td>
                                       </tr>
+                                      <?php endforeach; ?>
                                   </tbody>
                               </table>
                

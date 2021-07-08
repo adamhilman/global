@@ -50,13 +50,16 @@ project_upload.on("sending", function(a,b,c){
   a.token=Math.random();
   c.append("token_file",a.token);
 });
+</script>
+<script>  
+$(document).ready(function() {
+    $('#2').DataTable();
+} );
 
-  $(function () {
-    $("#example1").DataTable({
+$("#example1").DataTable({
       "responsive": true, "lengthChange": false, "autoWidth": false,
       "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
     }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-  });
 
 $('#simpan_file').click(function() {
     location.reload();

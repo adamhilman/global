@@ -9,6 +9,7 @@ class Admin extends CI_Controller {
     //load Helper for Form
     $this->load->helper('url', 'form'); 
     $this->load->library('form_validation');
+	$this->load->model('Mod_admin');
     }
 	public function index()
 	{
@@ -20,7 +21,8 @@ class Admin extends CI_Controller {
 	public function project()
 	{
         $this->load->view('header');
-		$this->load->view('admin/project/index');
+		$data['project'] = $this->Mod_admin->get_project()->result();
+		$this->load->view('admin/project/index', $data);
         $this->load->view('footer');
 	}
 
@@ -38,6 +40,23 @@ class Admin extends CI_Controller {
         $this->load->view('footer');
 	}
 
+	public function add_project()
+	{
+        $data = array(
+			'nama_paket' => $this->input->post('nama_paket'),
+			'sub_pekerjaan' => $this->input->post('sub_pekerjaan'),
+			'lokasi_pekerjaan' => $this->input->post('lokasi_pekerjaan'),
+			'nama_ppk' => $this->input->post('nama_ppk'),
+			'alamat_ppk' => $this->input->post('alamat_ppk'),
+			'nomor_kontrak' => $this->input->post('nomor_kontrak'),
+			'nilai_kontrak' => $this->input->post('nilai_kontrak'),
+			'selesai_kontrak' => $this->input->post('selesai_kontrak'),
+			'serah_terima' => $this->input->post('serah_terima'),
+			);
+			$this->Mod_admin->insert_project($data);
+			redirect(base_url().'admin/project');
+	}
+
 	public function upload_file_project() 
     {
 		$file = $_FILES['file_project']['name'];
@@ -50,6 +69,7 @@ class Admin extends CI_Controller {
         $config['overwrite'] = TRUE;
         $config['remove_spaces'] = FALSE;
         $config['file_name'] = $token.$file;
+		$config['max_size'] = 10000;
         $this->load->library('upload', $config);
         $this->upload->initialize($config);
         if (isset($_FILES['file_project']) && !empty($_FILES['file_project']['name'])) {
@@ -79,4 +99,33 @@ class Admin extends CI_Controller {
 
 		echo "{}";
 	}
+
+	public function claim()
+	{
+        $this->load->view('header');
+		$this->load->view('admin/claim_kerja/index');
+        $this->load->view('footer');
+	}
+
+	public function laporan_pdf(){
+
+		// panggil library yang kita buat sebelumnya yang bernama pdfgenerator
+        $this->load->library('pdf');
+        
+        // title dari pdf
+        $this->data['title_pdf'] = 'Laporan Penjualan Toko Kita';
+        
+        // filename dari pdf ketika didownload
+        $file_pdf = 'laporan_penjualan_toko_kita';
+        // setting paper
+        $paper = 'A4';
+        //orientasi paper potrait / landscape
+        $orientation = "landscape";
+		$data['project'] = $this->Mod_admin->get_project()->result();
+		$html = $this->load->view('laporan_project', $data, TRUE);	    
+        
+        // run dompdf
+        $this->pdf->generate($html, $file_pdf,$paper,$orientation);
+    
+    }
 }
