@@ -101,8 +101,9 @@
               </div>
             </div>
             <div class="col-12 col-md-12 col-lg-4 order-1 order-md-2">
+            <?php foreach ($project as $p) : ?>
               <h3 class="text-primary"><i class="fas fa-file"></i> Project A</h3>
-              <p class="text-muted">Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terr.</p>
+              <p class="text-muted"><?php echo $project->nama_paket?></p>
               <br>
               <div class="text-muted">
                 <p class="text-sm">Client Company
@@ -141,6 +142,7 @@
                 <a id="simpan_file" class="btn btn-sm btn-primary">Simpan files</a>
                 <a href="#" class="btn btn-sm btn-warning">Report contact</a>
               </div>
+              <?php endforeach ?>
             </div>
           </div>
         </div>

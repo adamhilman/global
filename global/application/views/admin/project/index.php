@@ -58,7 +58,7 @@
                                           <td>Win 95+</td>
                                           <td> 4</td>
                                           <td>X</td>
-                                          <td><a href="<?php base_url()?>detail_project/">Detail</td>
+                                          <td><a href="<?php echo base_url().'admin/detail_project/'.$p->id_project?>">Detail</td>
                                       </tr>
                                       <?php endforeach; ?>
                                   </tbody>

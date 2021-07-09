@@ -26,10 +26,12 @@ class Admin extends CI_Controller {
         $this->load->view('footer');
 	}
 
-	public function detail_project()
+	public function detail_project($id_project)
 	{
+		$id_project = $this->uri->segment('3');
         $this->load->view('header');
-		$this->load->view('admin/project/detail_project');
+		$data['project'] = $this->Mod_admin->detail_project($id_project, 'tbl_project')->row();
+		$this->load->view('admin/project/detail_project', $data);
         $this->load->view('footer');
 	}
 
@@ -60,6 +62,7 @@ class Admin extends CI_Controller {
 	public function upload_file_project() 
     {
 		$file = $_FILES['file_project']['name'];
+		$id_project = $this->uri->segment('3');
 		$token = $this->input->post('token_file');
         $explode = explode('.', $file);
         $extid = end($explode);
@@ -76,6 +79,12 @@ class Admin extends CI_Controller {
             if ($this->upload->do_upload('file_project')) {
                 $image_data =   $this->upload->data('file_project');
 				// this db insert
+				$file_project = $token.$file;
+				$data = array(
+					'nama_file' => $this->input->post($file_project),
+					'id_project' => $this->input->post($id_project)
+					);
+				$this->Mod_admin->insert_file_project($data);
             } else {
                 print_r($this->upload->display_errors());
 				exit;

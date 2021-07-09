@@ -6,10 +6,18 @@ Class Mod_admin extends CI_Model{
         return $this->db->get();
     }
 
+    function detail_project($id){
+        $this->db->from('tbl_project');
+        $this->db->where('id_project', $id);
+        return $this->db->get();
+    }
     function insert_project($data){
         $this->db->insert('tbl_project', $data);
     }
 
+    function insert_file_project($data){
+        $this->db->insert('tbl_file_project', $data);
+    }
     function get_surat_masuk(){
         $this->db->from('surat_masuk');
         $this->db->where('arsip', '0');
