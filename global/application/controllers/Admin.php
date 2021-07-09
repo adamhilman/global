@@ -59,10 +59,9 @@ class Admin extends CI_Controller {
 			redirect(base_url().'admin/project');
 	}
 
-	public function upload_file_project() 
+	public function upload_file_project($id_project) 
     {
 		$file = $_FILES['file_project']['name'];
-		$id_project = $this->uri->segment('3');
 		$token = $this->input->post('token_file');
         $explode = explode('.', $file);
         $extid = end($explode);
@@ -81,10 +80,12 @@ class Admin extends CI_Controller {
 				// this db insert
 				$file_project = $token.$file;
 				$data = array(
-					'nama_file' => $this->input->post($file_project),
-					'id_project' => $this->input->post($id_project)
+					'nama_file' => $file_project,
+					'id_project' => $id_project
 					);
 				$this->Mod_admin->insert_file_project($data);
+				echo $file_project;
+				exit;
             } else {
                 print_r($this->upload->display_errors());
 				exit;

@@ -39,8 +39,10 @@
 <!-- Page specific script -->
 <script>
 Dropzone.autoDiscover = false;
+var project_id = "<?php echo $this->uri->segment('3');?>";
 var project_upload= new Dropzone(".dropzone", {
-  url: "<?php echo base_url()?>admin/upload_file_project",
+
+  url: "<?php echo base_url()?>admin/upload_file_project/"+project_id,
   method: "POST",
   paramName: "file_project",
   addRemoveLinks: true
