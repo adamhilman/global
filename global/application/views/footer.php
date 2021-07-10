@@ -49,7 +49,7 @@ var project_upload= new Dropzone(".dropzone", {
 });
 
 project_upload.on("sending", function(a,b,c){
-  a.token=Math.random();
+  a.token=Math.random().toString(36).substr(2);
   c.append("token_file",a.token);
 });
 </script>

@@ -31,6 +31,7 @@ class Admin extends CI_Controller {
 		$id_project = $this->uri->segment('3');
         $this->load->view('header');
 		$data['project'] = $this->Mod_admin->detail_project($id_project, 'tbl_project')->row();
+		$data['file_project'] = $this->Mod_admin->detail_file_project($id_project)->result();
 		$this->load->view('admin/project/detail_project', $data);
         $this->load->view('footer');
 	}
