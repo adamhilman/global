@@ -118,12 +118,18 @@
             <table width="400">
               <?php foreach ($file_project as $fp) : ?>
                 <li>
+                  <?php if ($fp->nama_file == NULL){?>
+                    <tr>
+                      <td>File Tidak Ada</td>
+                    </tr>
+                  <?php }else{?>
                     <tr>
                       <td><a href="<?php echo base_url() ?>assets/upload/project/<?php echo $fp->nama_file ?>" class="btn-link text-secondary">
-                          <i class="far fa-fw fa-file-word"></i><?php echo $fp->nama_file ?></td></a>
-                      <td> <i class="fas fa-trash"></i>
+                          <i class="far fa-fw fa-file-word"></i><?php echo $fp->nama_file ?></a></td>
+                      <td><a href="<?php echo base_url().'admin/delete_file_project/'.$fp->id_file?>"><i class="fas fa-trash"></a></i>
                       </td>
                     </tr>
+                    <?php }?>
                 </li>
               <?php endforeach ?>
               </table>

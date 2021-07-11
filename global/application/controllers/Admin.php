@@ -28,6 +28,11 @@ class Admin extends CI_Controller {
 
 	public function detail_project($id_project)
 	{
+		$project_id = array(
+			'id_project'  => $id_project
+		);
+		
+		$this->session->set_userdata($project_id);
 		$id_project = $this->uri->segment('3');
         $this->load->view('header');
 		$data['project'] = $this->Mod_admin->detail_project($id_project, 'tbl_project')->row();
@@ -64,14 +69,12 @@ class Admin extends CI_Controller {
     {
 		$file = $_FILES['file_project']['name'];
 		$token = $this->input->post('token_file');
-        $explode = explode('.', $file);
-        $extid = end($explode);
         $this->load->library('image_lib');
         $config['upload_path'] = FCPATH . "/assets/upload/project/";
         $config['allowed_types'] = 'gif|jpg|png|pdf|doc|docx|jpeg';
         $config['overwrite'] = TRUE;
         $config['remove_spaces'] = FALSE;
-        $config['file_name'] = $token.$file;
+        $config['file_name'] = $token;
 		$config['max_size'] = 10000;
         $this->load->library('upload', $config);
         $this->upload->initialize($config);
@@ -79,14 +82,13 @@ class Admin extends CI_Controller {
             if ($this->upload->do_upload('file_project')) {
                 $image_data =   $this->upload->data('file_project');
 				// this db insert
-				$file_project = $token.$file;
+				$file_project = $file;
 				$data = array(
+					'token' => $token,
 					'nama_file' => $file_project,
 					'id_project' => $id_project
 					);
 				$this->Mod_admin->insert_file_project($data);
-				echo $file_project;
-				exit;
             } else {
                 print_r($this->upload->display_errors());
 				exit;
@@ -97,15 +99,35 @@ class Admin extends CI_Controller {
 	public function hapus_file_project(){
 		// Ambil Token
 		$token=$this->input->post('token');
-		$project_file=$this->db->get_where('project_file', array('token'=>$token));
-
-		if($project_file->num_rows()>0){
+		$project_file=$this->db->query("select * from tbl_file_project where token = '$token'");		
+		if($project_file->num_rows() > 0){
 			$hasil=$project_file->row();
 			$nama_file=$hasil->nama_file;
-			if(file_exists($file=FCPATH.'assets/upload/project/'.$nama_file)){
+			$explode = explode('.', $nama_file);
+			$extid = end($explode);
+			if(file_exists($file=FCPATH.'assets/upload/project/'.$token.'.'.$extid)){
 				unlink($file);
 			}
-			$this->db->delete('project_file', array('token'=>$token));
+			$this->db->delete('tbl_file_project', array('token'=>$token));
+		}
+
+		echo "{}";
+	}
+
+	public function delete_file_project($id_file){
+		$u = $this->session->userdata('id_project');
+		$project_file=$this->db->query("select * from tbl_file_project where id_file = '$id_file'");		
+		if($project_file->num_rows() > 0){
+			$hasil=$project_file->row();
+			$nama_file=$hasil->nama_file;
+			$token=$hasil->token;
+			$explode = explode('.', $nama_file);
+			$extid = end($explode);
+			if(file_exists($file=FCPATH.'assets/upload/project/'.$token.'.'.$extid)){
+				unlink($file);
+			}
+			$this->db->delete('tbl_file_project', array('id_file'=>$id_file));
+			redirect('admin/detail_project/'.$u);
 		}
 
 		echo "{}";
@@ -133,7 +155,7 @@ class Admin extends CI_Controller {
         //orientasi paper potrait / landscape
         $orientation = "landscape";
 		$data['project'] = $this->Mod_admin->get_project()->result();
-		$html = $this->load->view('laporan_project', $data, TRUE);	    
+		$html = $this->load->view('admin/project/laporan_project', $data, TRUE);	    
         
         // run dompdf
         $this->pdf->generate($html, $file_pdf,$paper,$orientation);

@@ -13,7 +13,7 @@ Class Mod_admin extends CI_Model{
     }
 
     function detail_file_project($id){
-        return $this->db->query('select tbl_project.id_project, tbl_file_project.id_file, tbl_file_project.nama_file FROM tbl_project LEFT JOIN tbl_file_project ON tbl_project.id_project = tbl_file_project.id_project WHERE tbl_project.id_project = '.$id);
+        return $this->db->query("select tbl_project.id_project, tbl_file_project.id_file, tbl_file_project.nama_file FROM tbl_project LEFT JOIN tbl_file_project ON tbl_project.id_project = tbl_file_project.id_project WHERE tbl_project.id_project = $id");
     }
     function insert_project($data){
         $this->db->insert('tbl_project', $data);

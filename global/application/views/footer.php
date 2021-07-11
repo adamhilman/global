@@ -52,6 +52,23 @@ project_upload.on("sending", function(a,b,c){
   a.token=Math.random().toString(36).substr(2);
   c.append("token_file",a.token);
 });
+
+project_upload.on("removedfile", function(a){
+  var token=a.token;
+  $.ajax({
+    type:"post",
+    data:{token:token},
+    url:"<?php echo base_url('admin/hapus_file_project')?>",
+    cache:false,
+    dataType:'json',
+    success:function(){
+      console.log("Sukses Hapus");
+    },
+    error:function(){
+      console.log("error");
+    }
+  });
+});
 </script>
 <script>  
 $(document).ready(function() {
