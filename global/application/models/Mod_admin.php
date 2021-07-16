@@ -28,6 +28,12 @@ Class Mod_admin extends CI_Model{
 		$this->db->update($table,$data);
 	}	
 
+    function hapus_data($where,$table){
+        $this->db->where($where);
+        $this->db->delete($table);
+    }
+
+    
     function get_surat_masuk(){
         $this->db->from('surat_masuk');
         $this->db->where('arsip', '0');

@@ -63,7 +63,9 @@
                                           </td>
                                           <td><?php echo $p->nama_ppk?></td>
                                           <td><a href="<?php echo base_url().'admin/detail_project/'.$p->id_project?>"><i class="fas fa-eye"></i></a>
-                                          <a href="<?php echo base_url().'admin/edit_project/'.$p->id_project?>"><i class="fas fa-edit"></i></a></td>
+                                          <a href="<?php echo base_url().'admin/edit_project/'.$p->id_project?>"><i class="fas fa-edit"></i></a>
+                                          <a href="<?php echo base_url().'admin/hapus_project/'.$p->id_project?>"><i class="fas fa-trash"></i></a>
+                                        </td>
                                       </tr>
                                       <?php endforeach; ?>
                                   </tbody>

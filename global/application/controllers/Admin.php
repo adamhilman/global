@@ -144,6 +144,8 @@ class Admin extends CI_Controller {
 
 	function update_project(){
 		$id = $this->input->post('id_project');
+		$nominal = $this->input->post('nilai_kontrak');
+		$nilai_kontrak = str_replace(".","",$nominal);
 
 		$data = array(
 			'nama_paket' => $this->input->post('nama_paket'),
@@ -152,7 +154,7 @@ class Admin extends CI_Controller {
 			'nama_ppk' => $this->input->post('nama_ppk'),
 			'alamat_ppk' => $this->input->post('alamat_ppk'),
 			'nomor_kontrak' => $this->input->post('nomor_kontrak'),
-			'nilai_kontrak' => $this->input->post('nilai_kontrak'),
+			'nilai_kontrak' => $nilai_kontrak,
 			'selesai_kontrak' => $this->input->post('selesai_kontrak'),
 			'serah_terima' => $this->input->post('serah_terima'),
 		);
@@ -160,11 +162,16 @@ class Admin extends CI_Controller {
 		$where = array(
 			'id_project' => $id
 		);
-		
-		// echo $this->input->post('nilai_kontrak');
-		// exit;
 	
 		$this->Mod_admin->update_project($where,$data,'tbl_project');
+		redirect('admin/project');
+	}
+
+	function hapus_project($id){
+		$where_project = array('id_project' => $id);
+		$this->Mod_admin->hapus_data($where_project,'tbl_project');
+		$this->Mod_admin->hapus_data($where_project,'tbl_file_project');
+
 		redirect('admin/project');
 	}
 
