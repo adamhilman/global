@@ -18,6 +18,9 @@
   <link rel="stylesheet" href="<?php echo base_url() ?>assets/plugins/dropzone/min/dropzone.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="<?php echo base_url() ?>assets/dist/css/adminlte.min.css">
+  <!-- Sweet Alert -->
+  <script src="https://lipis.github.io/bootstrap-sweetalert/dist/sweetalert.js"></script>
+  <link rel="stylesheet" href="https://lipis.github.io/bootstrap-sweetalert/dist/sweetalert.css" />
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -214,7 +217,7 @@
               </a>
             </li>
             <li class="nav-item">
-              <a href="<?php echo base_url()?>admin/claim" class="nav-link">
+              <a href="<?php echo base_url() ?>admin/claim" class="nav-link">
                 <i class="nav-icon fa fa-plane"></i>
                 <p>
                   Claim Kunjungan Kerja

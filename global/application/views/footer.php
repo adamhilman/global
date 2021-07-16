@@ -103,5 +103,45 @@ $('#simpan_file').click(function() {
     $("#nilai_kontrak").inputmask({ alias : "rupiah" });
 });
 </script>
+<script type="text/javascript">
+    $(".remove").click(function(){
+        var id = $(this).parents("tr").attr("name");
+    
+       swal({
+        title: "Apakah anda yakin?",
+        text: "Data project beserta file didalamnya tidak bisa dikembalikan!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonClass: "btn-danger",
+        confirmButtonText: "Ya, saya yakin!",
+        cancelButtonText: "Tidak, batalkan!",
+        closeOnConfirm: false,
+        closeOnCancel: false
+      },
+      function(isConfirm) {
+        if (isConfirm) {
+          $.ajax({
+             url: '<?php echo base_url()?>admin/hapus_project/'+id,
+             type: 'DELETE',
+             error: function() {
+                alert('Ops! Terjadi kesalahan');
+             },
+             success: function(data) {
+                  $("#"+id).remove();
+                  swal("Terhapus!", "Data project dan file berhasil dihapus.", "success");
+                  setTimeout(function(){
+                   location.reload();
+                  }, 3000);
+
+             }
+          });
+        } else {
+          swal("Dibatalkan", "Data project masih disimpan.", "error");
+        }
+      });
+     
+    });
+    
+</script>
 </body>
 </html>

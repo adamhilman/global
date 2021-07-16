@@ -53,7 +53,7 @@
                                         return $hasil_rupiah;
                                     };
                                     foreach ($project as $p) : ?>
-                                      <tr>
+                                      <tr name="<?php echo $p->id_project?>">
                                       <td>1</td>
                                           <td><?php echo $p->nama_paket?></td>
                                           <td><?php echo $p->sub_pekerjaan?></td>
@@ -64,7 +64,7 @@
                                           <td><?php echo $p->nama_ppk?></td>
                                           <td><a href="<?php echo base_url().'admin/detail_project/'.$p->id_project?>"><i class="fas fa-eye"></i></a>
                                           <a href="<?php echo base_url().'admin/edit_project/'.$p->id_project?>"><i class="fas fa-edit"></i></a>
-                                          <a href="<?php echo base_url().'admin/hapus_project/'.$p->id_project?>"><i class="fas fa-trash"></i></a>
+                                          <a href="#" class="remove"><i class="fas fa-trash"></i></a>
                                         </td>
                                       </tr>
                                       <?php endforeach; ?>
