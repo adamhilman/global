@@ -11,6 +11,7 @@ class Admin extends CI_Controller {
     $this->load->library('form_validation');
 	$this->load->model('Mod_admin');
     }
+	
 	public function index()
 	{
         $this->load->view('header');
@@ -131,6 +132,40 @@ class Admin extends CI_Controller {
 		}
 
 		echo "{}";
+	}
+
+	public function edit_project($id_project)
+	{
+			$this->load->view('header');
+			$data['project'] = $this->Mod_admin->detail_project($id_project, 'tbl_project')->row();
+			$this->load->view('admin/project/edit_project', $data);
+			$this->load->view('footer');
+	}
+
+	function update_project(){
+		$id = $this->input->post('id_project');
+
+		$data = array(
+			'nama_paket' => $this->input->post('nama_paket'),
+			'sub_pekerjaan' => $this->input->post('sub_pekerjaan'),
+			'lokasi_pekerjaan' => $this->input->post('lokasi_pekerjaan'),
+			'nama_ppk' => $this->input->post('nama_ppk'),
+			'alamat_ppk' => $this->input->post('alamat_ppk'),
+			'nomor_kontrak' => $this->input->post('nomor_kontrak'),
+			'nilai_kontrak' => $this->input->post('nilai_kontrak'),
+			'selesai_kontrak' => $this->input->post('selesai_kontrak'),
+			'serah_terima' => $this->input->post('serah_terima'),
+		);
+	
+		$where = array(
+			'id_project' => $id
+		);
+		
+		// echo $this->input->post('nilai_kontrak');
+		// exit;
+	
+		$this->Mod_admin->update_project($where,$data,'tbl_project');
+		redirect('admin/project');
 	}
 
 	public function claim()

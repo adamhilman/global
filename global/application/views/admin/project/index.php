@@ -42,23 +42,28 @@
                                           <th>Nama Project</th>
                                           <th>Sub Bidang Pekerjaan</th>
                                           <th>Nilai Kontrak</th>
-                                          <th>Lokasi</th>
-                                          <th>CSS grade</th>
+                                          <th>Pemberi Kontrak / Pejabat Pembuat Komitmen</th>
                                           <th>Aksi</th>
                                       </tr>
                                   </thead>
                                   <tbody>
-                                  <?php foreach ($project as $p) : ?>
+                                  <?php 
+                                  function rupiah($angka){
+                                    $hasil_rupiah = "Rp " . number_format($angka,0,',','.');
+                                        return $hasil_rupiah;
+                                    };
+                                    foreach ($project as $p) : ?>
                                       <tr>
                                       <td>1</td>
                                           <td><?php echo $p->nama_paket?></td>
-                                          <td>Internet
-                                              Explorer 4.0
+                                          <td><?php echo $p->sub_pekerjaan?></td>
+                                          <td>
+                                            <?php
+                                            echo rupiah($p->nilai_kontrak)?>
                                           </td>
-                                          <td>Win 95+</td>
-                                          <td> 4</td>
-                                          <td>X</td>
-                                          <td><a href="<?php echo base_url().'admin/detail_project/'.$p->id_project?>">Detail</td>
+                                          <td><?php echo $p->nama_ppk?></td>
+                                          <td><a href="<?php echo base_url().'admin/detail_project/'.$p->id_project?>"><i class="fas fa-eye"></i></a>
+                                          <a href="<?php echo base_url().'admin/edit_project/'.$p->id_project?>"><i class="fas fa-edit"></i></a></td>
                                       </tr>
                                       <?php endforeach; ?>
                                   </tbody>

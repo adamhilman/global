@@ -22,6 +22,12 @@ Class Mod_admin extends CI_Model{
     function insert_file_project($data){
         $this->db->insert('tbl_file_project', $data);
     }
+
+    function update_project($where,$data,$table){
+		$this->db->where($where);
+		$this->db->update($table,$data);
+	}	
+
     function get_surat_masuk(){
         $this->db->from('surat_masuk');
         $this->db->where('arsip', '0');

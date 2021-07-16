@@ -32,6 +32,9 @@
 <script src="<?php echo base_url()?>assets/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 <!-- dropzonejs -->
 <script src="<?php echo base_url() ?>assets/plugins/dropzone/min/dropzone.min.js"></script>
+<!-- InputMask -->
+<script src="<?php echo base_url() ?>assets/plugins/moment/moment.min.js"></script>
+<script src="<?php echo base_url() ?>assets/plugins/inputmask/jquery.inputmask.min.js"></script>
 <!-- AdminLTE App -->
 <script src="<?php echo base_url()?>assets/dist/js/adminlte.min.js"></script>
 <!-- AdminLTE for demo purposes -->
@@ -82,6 +85,22 @@ $("#example1").DataTable({
 
 $('#simpan_file').click(function() {
     location.reload();
+});
+</script>
+<script>
+  Inputmask.extendAliases({
+  rupiah: {
+            groupSeparator: ".",
+            alias: "numeric",
+            placeholder: "0",
+            autoGroup: true,
+            digits: 0,
+            digitsOptional: false,
+            clearMaskOnLostFocus: false
+        }
+});
+  $(document).ready(function(){
+    $("#nilai_kontrak").inputmask({ alias : "rupiah" });
 });
 </script>
 </body>
