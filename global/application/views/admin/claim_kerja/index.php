@@ -8,7 +8,7 @@
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item"><a href="<?php echo base_url()?>admin/">Home</a></li>
                         <li class="breadcrumb-item active">Claim Kunjungan Kerja</li>
                     </ol>
                 </div>
@@ -27,8 +27,8 @@
                         <h3 class="card-title">Data Claim Kunjungan Kerja</h3>
                     </div>
                     <div class="col-md-2">
-                        <a href="<?php echo base_url()?>admin/tambah_project">
-                        <button type="button" class="btn btn-block btn-primary btn-xs">Tambah Data</button>
+                        <a href="<?php echo base_url()?>admin/tambah_claim">
+                        <button type="button" class="btn btn-block btn-primary btn-xs">Ajukan Claim</button>
                         </a>
                     </div>
                 </div>
@@ -41,21 +41,17 @@
                                         <th>No.</th>
                                           <th>Nama Project</th>
                                           <th>Jumlah Claim</th>
-                                          <th>Nilai Kontrak</th>
-                                          <th>Lokasi</th>
-                                          <th>CSS grade</th>
+                                          <th>Tanggal Claim</th>
+                                          <th>Status</th>
                                           <th>Aksi</th>
                                       </tr>
                                   </thead>
                                   <tbody>
                                       <tr>
                                       <td>1</td>
-                                          <td>Trident</td>
-                                          <td>Internet
-                                              Explorer 4.0
-                                          </td>
                                           <td>Win 95+</td>
                                           <td> 4</td>
+                                          <td>X</td>
                                           <td>X</td>
                                           <td><a href="<?php base_url()?>detail_project/">Detail</td>
                                       </tr>

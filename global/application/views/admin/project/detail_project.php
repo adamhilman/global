@@ -8,7 +8,7 @@
         </div>
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
-            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item"><a href="<?php echo base_url()?>admin/">Home</a></li>
             <li class="breadcrumb-item active">Project Detail</li>
           </ol>
         </div>
@@ -147,6 +147,8 @@
             </div>
           </div>
         </div>
+        <a href="<?php echo base_url()?>admin/project" class="btn btn-primary"><i class="fas fa-arrow-left"></i>Kembali</a>
+
       </div>
       <!-- /.card-body -->
     </div>

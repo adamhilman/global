@@ -66,8 +66,8 @@ class Admin extends CI_Controller {
 			redirect(base_url().'admin/project');
 	}
 
-	public function upload_file_project($id_project) 
-    {
+	public function upload_file_project($id_project)
+	{
 		$file = $_FILES['file_project']['name'];
 		$token = $this->input->post('token_file');
         $this->load->library('image_lib');
@@ -97,7 +97,8 @@ class Admin extends CI_Controller {
         } 
     }
 
-	public function hapus_file_project(){
+	public function hapus_file_project()
+	{
 		// Ambil Token
 		$token=$this->input->post('token');
 		$project_file=$this->db->query("select * from tbl_file_project where token = '$token'");		
@@ -115,7 +116,8 @@ class Admin extends CI_Controller {
 		echo "{}";
 	}
 
-	public function delete_file_project($id_file){
+	public function delete_file_project($id_file)
+	{
 		$u = $this->session->userdata('id_project');
 		$project_file=$this->db->query("select * from tbl_file_project where id_file = '$id_file'");		
 		if($project_file->num_rows() > 0){
@@ -142,7 +144,8 @@ class Admin extends CI_Controller {
 			$this->load->view('footer');
 	}
 
-	function update_project(){
+	function update_project()
+	{
 		$id = $this->input->post('id_project');
 		$nominal = $this->input->post('nilai_kontrak');
 		$nilai_kontrak = str_replace(".","",$nominal);
@@ -167,7 +170,8 @@ class Admin extends CI_Controller {
 		redirect('admin/project');
 	}
 
-	function hapus_project($id){
+	function hapus_project($id)
+	{
 		$where_project = array('id_project' => $id);
 		$this->Mod_admin->hapus_data($where_project,'tbl_project');
 		$this->Mod_admin->hapus_data($where_project,'tbl_file_project');
@@ -182,7 +186,15 @@ class Admin extends CI_Controller {
         $this->load->view('footer');
 	}
 
-	public function laporan_pdf(){
+	public function tambah_claim()
+	{
+        $this->load->view('header');
+		$this->load->view('admin/claim_kerja/tambah_claim');
+        $this->load->view('footer');
+	}
+
+	public function laporan_pdf()
+	{
 
 		// panggil library yang kita buat sebelumnya yang bernama pdfgenerator
         $this->load->library('pdf');
