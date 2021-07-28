@@ -29,11 +29,14 @@ class Admin extends CI_Controller {
 
 	public function detail_project($id_project)
 	{
+		// untuk mengambil id_project untuk mengembalikan halaman setelah hapus file
 		$project_id = array(
 			'id_project'  => $id_project
 		);
 		
 		$this->session->set_userdata($project_id);
+		//-------------------------------------------------------
+
 		$id_project = $this->uri->segment('3');
         $this->load->view('header');
 		$data['project'] = $this->Mod_admin->detail_project($id_project, 'tbl_project')->row();
