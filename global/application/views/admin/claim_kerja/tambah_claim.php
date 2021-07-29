@@ -8,7 +8,7 @@
                   </div>
                   <div class="col-sm-6">
                       <ol class="breadcrumb float-sm-right">
-                          <li class="breadcrumb-item"><a href="<?php echo base_url()?>admin">Home</a></li>
+                          <li class="breadcrumb-item"><a href="<?php echo base_url() ?>admin">Home</a></li>
                           <li class="breadcrumb-item active">Ajukan Claim</li>
                       </ol>
                   </div>
@@ -18,7 +18,7 @@
 
       <!-- Main content -->
       <section class="content">
-          <form action="<?php echo base_url()?>admin/add_project" method="POST">
+          <form action="<?php echo base_url() ?>admin/add_project" method="POST" enctype="multipart/form-data">
               <div class="row">
                   <div class="col-md-12">
                       <div class="card card-primary">
@@ -32,88 +32,56 @@
                           </div>
                           <div class="card-body">
                               <div class="row">
-                                  <div class="col-sm-6">
+                                  <div class="col-md-3">
                                       <div class="form-group">
-                                          <label for="nama_paket">Nama Paket Pekerjaan</label>
-                                          <textarea id="nama_paket" name="nama_paket" class="form-control" rows="5"></textarea>
-                                      </div>
-                                  </div>
-                                  <div class="col-sm-6">
-                                      <div class="form-group">
-                                          <label for="sub_pekerjaan">Sub Bidang Pekerjaan</label>
-                                          <input type="text" name="sub_pekerjaan" class="form-control">
-                                      </div>
-                                      <div class="form-group">
-                                          <label for="lokasi_pekerjaan">Lokasi</label>
-                                          <input type="text" name="lokasi_pekerjaan" class="form-control">
-                                      </div>
-                                  </div>
-                              </div>
-                              <hr>
-                              <h5>Pemberi Tugas / Pejabat Pembuat Komitmen</h5>
-                              <div class="row">
-                                  <div class="col-sm-6">
-                                      <div class="form-group">
-                                          <label for="nama_ppk">Nama PPK</label>
-                                          <input type="text" name="nama_ppk" class="form-control">
-                                      </div>
-                                  </div>
-                                  <div class="col-sm-6">
-                                      <div class="form-group">
-                                          <label for="alamat_ppk">Alamat PPK</label>
-                                          <textarea name="alamat_ppk" class="form-control" row="3"></textarea>
-                                      </div>
-                                  </div>
-                              </div>
-                              <hr>
-                              <h5>Kontrak</h5>
-                              <div class="row">
-                                  <div class="col-sm-3">
-                                      <div class="form-group">
-                                          <label for="nomor_kontrak">No. / Tanggal Kontrak</label>
-                                          <input type="text" name="nomor_kontrak" class="form-control">
-                                      </div>
-                                  </div>
-                                  <div class="col-sm-3">
-                                      <div class="form-group">
-                                          <label for="nilai_kontrak">Nilai Kontrak</label>
-                                          <input type="text" id="nilai_kontrak" name="nilai_kontrak" class="form-control">
-                                      </div>
-                                  </div>
-                                  <div class="col-sm-3">
-                                      <div class="form-group">
-                                          <label for="selesai_kontrak">Selesai Kontrak (mm/dd/yyyy)</label>
-                                          <input type="date" name="selesai_kontrak" class="form-control">
-                                      </div>
-                                  </div>
-                                  <div class="col-sm-3">
-                                      <div class="form-group">
-                                          <label for="serah_terima">BA Serah Terima</label>
-                                          <select id="inputStatus" name="serah_terima" class="form-control custom-select">
-                                              <option selected disabled>Select one</option>
-                                              <option value="0">Selesai</option>
-                                              <option value="1">Proses</option>
-                                              <option value="2">Ditahan</option>
+                                          <label for="nama_paket">Pilih Paket Pekerjaan</label>
+                                          <select name="nama_paket" class="form-control">
+                                              <option>Project 1</option>
                                           </select>
                                       </div>
                                   </div>
                               </div>
                               <div class="row">
-                                  <div class="col-12">
-                                      <a href="<?php echo base_url()?>admin/project" class="btn btn-secondary">Cancel</a>
-                                      <input type="submit" value="Create new Porject" class="btn btn-success float-right">
+                                  <div class="col-md-12">
+                                      <table id="claim" class="table">
+                                          <thead>
+                                              <tr>
+                                                  <td>No.</td>
+                                                  <td>Nominal</td>
+                                                  <td>Keterangan</td>
+                                                  <td>Tanda terima / Invoice</td>
+                                                  <td>Aksi</td>
+                                              </tr>
+                                          </thead>
+                                          <tbody>
+                                              <tr>
+                                                  <td>No.</td>
+                                                  <td><input type="text" id="nominal_claim" name="nominal_claim[][name]" class="form-control"></td>
+                                                  <td>
+                                                      <textarea name="keterangan" rows="3" class="form-control"></textarea>
+                                                  </td>
+                                                  <td><input type="file" class="form-control"></td>
+                                                  <td><button type="button" name="tambah" id="tambah" class="btn btn-success">Tambah data</button></td> </tr>
+                                          </tbody>
+                                      </table>
                                   </div>
+                          </div>
+                          <div class="row">
+                              <div class="col-12">
+                                  <a href="<?php echo base_url() ?>admin/project" class="btn btn-secondary">Cancel</a>
+                                  <input type="submit" value="Create new Porject" class="btn btn-success float-right">
                               </div>
                           </div>
-                          <!-- /.card-body -->
                       </div>
-                      <!-- /.card -->
+                      <!-- /.card-body -->
                   </div>
+                  <!-- /.card -->
               </div>
+  </div>
 
-          </form>
+  </form>
 
-      </section>
-      <!-- /.content -->
+  </section>
+  <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
