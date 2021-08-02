@@ -220,44 +220,91 @@ class Admin extends CI_Controller
 
 
 		$data = array();
+
+		// Count total files
+		$countfiles = count($_FILES['file_claim']['name']);
+		// echo $countfiles;
+		// exit;
+		// // Looping all files
+		// for($i=0;$i<$countfiles;$i++){
+   
+		//   if(!empty($_FILES['file_claim']['name'][$i])){
+   
+		// 	// Define new $_FILES array - $_FILES['file']
+		// 	$_FILES['file_claim']['name'] = $_FILES['files']['name'][$i];
+		// 	$_FILES['file_claim']['type'] = $_FILES['files']['type'][$i];
+		// 	$_FILES['file_claim']['tmp_name'] = $_FILES['files']['tmp_name'][$i];
+		// 	$_FILES['file_claim']['error'] = $_FILES['files']['error'][$i];
+		// 	$_FILES['file_claim']['size'] = $_FILES['files']['size'][$i];
+  
+		// 	// Set preference
+		// 	$config['upload_path'] = '/assets/upload/claim'; 
+		// 	$config['allowed_types'] = 'jpg|jpeg|png|gif';
+		// 	$config['max_size'] = '5000'; // max_size in kb
+		// 	$config['file_name'] = $_FILES['files']['name'][$i];
+   
+		// 	//Load upload library
+		// 	$this->load->library('upload',$config); 
+   
+		// 	// File upload
+		// 	if($this->upload->do_upload('file_claim')){
+		// 	  // Get data about the file
+		// 	  $uploadData = $this->upload->data();
+		// 	  $filename = $uploadData['file_name'];
+  
+		// 	  // Initialize array
+		// 	  $data['file_claim'][] = $filename;
+		// 	}
+		//   }
+   
+		// }
+
+
+
+
+
+
+
 		$index = 0; // Set index array awal dengan 0
 		foreach ($nominal_claim as $datanominal) {
-			$this->load->library('image_lib');
-			$config['upload_path'] = FCPATH . "/assets/upload/claim/";
-			$config['allowed_types'] = 'gif|jpg|png|pdf|doc|docx|jpeg';
-			$config['overwrite'] = TRUE;
-			$config['remove_spaces'] = FALSE;
-			$config['file_name'] = $file_claim[$index];
-			$config['max_size'] = 10000;
-			$this->load->library('upload', $config);
-			
-			$this->upload->initialize($config);
-			//Jika ada file
-			if (isset($_FILES['file_claim[]']) && !empty($_FILES['file_claim[]']['name'])) {
-				//Upload file
-				if ($this->upload->do_upload('file_claim[]')) {
-					$this->upload->data();
-					// this db insert
-					array_push($data = array(
-						'id_claim' => $last_id,
-						'nominal' => $nominal_claim[$index],
-						'keterangan' => $keterangan[$index],
-						'file_claim' => $file_claim[$index],
-					));
-				} else {
-					print_r($this->upload->display_errors());
+			if(!empty($_FILES['file_claim']['name'][$index])){
+   
+				// Define new $_FILES array - $_FILES['file']
+				$_FILES['file_claim']['name'] = $_FILES['files']['name'][$index];
+				$_FILES['file_claim']['type'] = $_FILES['files']['type'][$index];
+				$_FILES['file_claim']['tmp_name'] = $_FILES['files']['tmp_name'][$index];
+				$_FILES['file_claim']['error'] = $_FILES['files']['error'][$index];
+				$_FILES['file_claim']['size'] = $_FILES['files']['size'][$index];
+	  
+				// Set preference
+				$config['upload_path'] = '/assets/upload/claim'; 
+				$config['allowed_types'] = 'jpg|jpeg|png|gif';
+				$config['max_size'] = '5000'; // max_size in kb
+				$config['file_name'] = $_FILES['file_claim']['name'][$index];
+	   
+				//Load upload library
+				$this->load->library('upload',$config); 
+	   
+				// File upload
+				if($this->upload->do_upload('file_claim')){
+				  // Get data about the file
+				  $uploadData = $this->upload->data();
+				  $filename = $uploadData['file_name'];
+					echo $filename;
 					exit;
+				  // Initialize array
+				  $data['file_claim'][] = $filename;
 				}
-			}else{
-				// Kita buat perulangan berdasarkan nominal claim sampai data terakhir
+			  }
+			  
+			// Kita buat perulangan berdasarkan nominal claim sampai data terakhir
 			array_push($data, array(
 				'id_claim' => $last_id,
 				'nominal' => $nominal_claim[$index],
 				'keterangan' => $keterangan[$index],
-				'file_claim' => "Tidak Ada",
+				'file_claim' => $filename,
 			));
-			}
-			
+
 			$index++;
 		}
 
