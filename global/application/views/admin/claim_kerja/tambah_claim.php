@@ -18,7 +18,7 @@
 
       <!-- Main content -->
       <section class="content">
-          <form action="<?php echo base_url() ?>admin/add_project" method="POST" enctype="multipart/form-data">
+          <form action="<?php echo base_url() ?>admin/simpan_claim" method="POST" enctype="multipart/form-data">
               <div class="row">
                   <div class="col-md-12">
                       <div class="card card-primary">
@@ -36,7 +36,9 @@
                                       <div class="form-group">
                                           <label for="nama_paket">Pilih Paket Pekerjaan</label>
                                           <select name="nama_paket" class="form-control">
-                                              <option>Project 1</option>
+                                              <?php foreach ($project as $p): ?>
+                                              <option value="<?php echo $p->id_project?>"><?php echo $p->nama_paket?></option>
+                                              <?php endforeach?>
                                           </select>
                                       </div>
                                   </div>
@@ -55,12 +57,12 @@
                                           </thead>
                                           <tbody>
                                               <tr>
-                                                  <td>No.</td>
-                                                  <td><input type="text" id="nominal_claim" name="nominal_claim[][name]" class="form-control"></td>
+                                                  <td>1</td>
+                                                  <td><input type="text" id="nominal_claim" name="nominal_claim[]" class="form-control"></td>
                                                   <td>
-                                                      <textarea name="keterangan" rows="3" class="form-control"></textarea>
+                                                      <textarea name="keterangan[]" rows="3" class="form-control"></textarea>
                                                   </td>
-                                                  <td><input type="file" class="form-control"></td>
+                                                  <td><input type="file" name="file_claim[]" class="form-control"></td>
                                                   <td><button type="button" name="tambah" id="tambah" class="btn btn-success">Tambah data</button></td> </tr>
                                           </tbody>
                                       </table>

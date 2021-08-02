@@ -33,6 +33,10 @@ Class Mod_admin extends CI_Model{
         $this->db->delete($table);
     }
 
+    function save_batch_claim($data){
+        return $this->db->insert_batch('tbl_detail_claim', $data);
+    }
+
     
     function get_surat_masuk(){
         $this->db->from('surat_masuk');

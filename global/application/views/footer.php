@@ -106,7 +106,10 @@
    
       $('#tambah').click(function(){  
            i++;  
-           $('#claim').append('<tr id="row'+i+'" class="dynamic-added"><td>'+i+'</td><td><input type="number" id="nominal_claim" name="nominal_claim[][name]" class="form-control"></td><td><button type="button" name="remove" id="'+i+'" class="btn btn-danger btn_remove">X</button></td></tr>');  
+           $('#claim').append('<tr id="row'+i+'" class="dynamic-added"><td>'+i+'</td><td><input type="text" id="nominal_claim[]" name="nominal_claim[]" class="form-control"></td>'
+           + '<td><textarea name="keterangan[]" rows="3" class="form-control"></textarea></td>'
+           + '<td><input type="file" name="file_claim[]" class="form-control"></td>'
+           + '<td><button type="button" name="remove" id="'+i+'" class="btn btn-danger btn_remove">X</button></td></tr>');  
       });
   
       $(document).on('click', '.btn_remove', function(){  
@@ -133,11 +136,11 @@
       alias: "rupiah"
     });
   });
-  $(document).ready(function() {
-    $("#nominal_claim").inputmask({
-      alias: "rupiah"
-    });
-  });
+  // $(document).ready(function() {
+  //   $("#nominal_claim").inputmask({
+  //     alias: "rupiah"
+  //   });
+  // });
 </script>
 <script type="text/javascript">
   $(".remove").click(function() {
