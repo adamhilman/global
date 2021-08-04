@@ -218,7 +218,39 @@ class Admin extends CI_Controller
 		$this->db->insert('tbl_claim', $data_claim);
 		$last_id = $this->db->insert_id();
 
-		
+		//Masukkan ke dalam table detail claim
+		$config['upload_path']          = 'assets/upload/claim';
+		$config['allowed_types']        = 'gif|jpg|jpeg|pdf|png';
+		$config['max_size']             = 5000;
+		$config['encrypt_name'] 		= true;
+		$this->load->library('upload',$config);
+		$jumlah_file = count($_FILES['file_claim']['name']);
+		for($i = 0; $i < $jumlah_file;$i++)
+		{
+            if(!empty($_FILES['file_claim']['name'][$i])){
+ 
+				$_FILES['file']['name'] = $_FILES['file_claim']['name'][$i];
+				$_FILES['file']['type'] = $_FILES['file_claim']['type'][$i];
+				$_FILES['file']['tmp_name'] = $_FILES['file_claim']['tmp_name'][$i];
+				$_FILES['file']['error'] = $_FILES['file_claim']['error'][$i];
+				$_FILES['file']['size'] = $_FILES['file_claim']['size'][$i];
+				
+				if($this->upload->do_upload('file')){
+					$uploadData = $this->upload->data();
+					$data['file_claim'] = $uploadData['file_name'];
+					$data['id_claim'] = $last_id;
+					$data['keterangan'] = $keterangan[$i];
+					$data['nominal'] = $nominal_claim[$i];
+					$this->db->insert('tbl_detail_claim',$data);
+				}else{
+					$error = array('error' => $this->upload->display_errors());
+
+					print_r($error);
+					exit;
+				}
+			}
+		}
+		redirect('admin/claim');
 	}
 
 	public function laporan_pdf()
