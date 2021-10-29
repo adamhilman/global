@@ -18,6 +18,7 @@
 
     <!-- Main content -->
     <section class="content">
+    <div class="flash-data" data-flashdata="<?= $this->session->flashdata('notif_claim'); ?>"></div>
 
         <!-- Default box -->
         <div class="card">

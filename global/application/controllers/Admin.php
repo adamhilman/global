@@ -241,12 +241,14 @@ class Admin extends CI_Controller
 					$data['id_claim'] = $last_id;
 					$data['keterangan'] = $keterangan[$i];
 					$data['nominal'] = $nominal_claim[$i];
+					$this->session->set_flashdata('notif_claim', 'disubmit', 'Success');
 					$this->db->insert('tbl_detail_claim',$data);
 				}else{
-					$error = array('error' => $this->upload->display_errors());
+					$this->session->set_flashdata('notif_claim', $this->upload->display_errors(), 'fail');
+					// $error = array('error' => $this->upload->display_errors());
 
-					print_r($error);
-					exit;
+					// print_r($error);
+					// exit;
 				}
 			}
 		}

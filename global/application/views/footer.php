@@ -181,6 +181,19 @@
 
   });
 </script>
+<script type="text/javascript">
+$(document).ready(function(){
+
+  const flashData = $('.flash-data').data('flashdata');
+if (flashData) {
+    wal({
+        title: 'Success',
+        text: 'Data Berhasil ' + flashData,
+        icon: 'success'
+    });
+} //rencana saya kasih else untuk notif data yg gagal
+});
+  </script>
 </body>
 
 </html>
