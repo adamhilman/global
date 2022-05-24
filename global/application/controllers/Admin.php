@@ -55,6 +55,8 @@ class Admin extends CI_Controller
 
 	public function add_project()
 	{
+		$nominal = $this->input->post('nilai_kontrak');
+		$nilai_kontrak = str_replace(".", "", $nominal);
 		$data = array(
 			'nama_paket' => $this->input->post('nama_paket'),
 			'sub_pekerjaan' => $this->input->post('sub_pekerjaan'),
@@ -62,7 +64,7 @@ class Admin extends CI_Controller
 			'nama_ppk' => $this->input->post('nama_ppk'),
 			'alamat_ppk' => $this->input->post('alamat_ppk'),
 			'nomor_kontrak' => $this->input->post('nomor_kontrak'),
-			'nilai_kontrak' => $this->input->post('nilai_kontrak'),
+			'nilai_kontrak' => $nilai_kontrak,
 			'selesai_kontrak' => $this->input->post('selesai_kontrak'),
 			'serah_terima' => $this->input->post('serah_terima'),
 		);
