@@ -225,7 +225,7 @@
               </a>
             </li>
             <li class="nav-item">
-              <a href="<?php echo base_url() ?>" class="nav-link">
+              <a href="<?php echo base_url()?>admin/form_cuti" class="nav-link">
                 <i class="nav-icon fa fa-calendar"></i>
                 <p>
                   Formulir Cuti

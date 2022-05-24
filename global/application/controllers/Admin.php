@@ -185,6 +185,13 @@ class Admin extends CI_Controller
 		redirect('admin/project');
 	}
 
+	public function form_cuti()
+	{
+		$this->load->view('header');
+		$this->load->view('admin/formulir_cuti/index');
+		$this->load->view('footer');
+	}
+
 	public function claim()
 	{
 		$this->load->view('header');
@@ -210,7 +217,6 @@ class Admin extends CI_Controller
 		$nominal_claim = $_POST['nominal_claim'];
 		$keterangan = $_POST['keterangan'];
 		$file_claim = $_FILES['file_claim']['name'];
-
 
 		//Insert ke dalam table claim
 		$data_claim = array(
