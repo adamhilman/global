@@ -7,6 +7,9 @@ class Admin extends CI_Controller
 	function __construct()
 	{
 		parent::__construct();
+		if($this->session->userdata('status') != "login"){
+			redirect(base_url("Welcome"));
+		}
 		//load Helper for Form
 		$this->load->helper('url', 'form');
 		$this->load->library('form_validation');

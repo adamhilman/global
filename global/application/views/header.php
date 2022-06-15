@@ -19,8 +19,10 @@
   <!-- Theme style -->
   <link rel="stylesheet" href="<?php echo base_url() ?>assets/dist/css/adminlte.min.css">
   <!-- Sweet Alert -->
-  <script src="https://lipis.github.io/bootstrap-sweetalert/dist/sweetalert.js"></script>
-  <link rel="stylesheet" href="https://lipis.github.io/bootstrap-sweetalert/dist/sweetalert.css" />
+  <!-- Sweet Alert -->
+  <script src="<?php echo base_url() ?>assets/plugins/sweetalert2/sweetalert2.all.min.js"></script>
+  <!-- <script src="https://lipis.github.io/bootstrap-sweetalert/dist/sweetalert.js"></script> -->
+  <!-- <link rel="stylesheet" href="https://lipis.github.io/bootstrap-sweetalert/dist/sweetalert.css" /> -->
 </head>
 
 <body class="hold-transition sidebar-mini">

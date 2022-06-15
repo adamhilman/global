@@ -186,7 +186,7 @@ $(document).ready(function(){
 
   const flashData = $('.flash-data').data('flashdata');
 if (flashData) {
-    wal({
+    swal({
         title: 'Success',
         text: 'Data Berhasil ' + flashData,
         icon: 'success'
