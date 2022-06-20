@@ -20,16 +20,34 @@ class Welcome extends CI_Controller {
 			'email' => $email,
 			'password' => md5($password)
 			);
+
+		$login_user = $this->db->get_where('tbl_user',array('email'=> $email))->result();
+		foreach($login_user as $d){
+				$nama = $d->nama;
+				$id_user = $d->id_user;//Untuk mengambil ID User
+				$email = $d->email;
+				$password = $d->password;
+				$level_user = $d->level_user;
+				$bulan_tahun = $d->bulan_tahun;
+				
+			}
+	
 		$cek = $this->mod_login->cek_login("tbl_user",$where)->num_rows();
+		
+
 		if($cek > 0){
  
 			$data_session = array(
 				'nama' => $nama,
-				'status' => "login"
+				'status' => "login",
+				'id_user' => $id_user,
+				'email' => $email,
+				'password' => $password,
+				'level_user' => $level_user,
+				'bulan_tahun' => $bulan_tahun
 				);
  
 			$this->session->set_userdata($data_session);
- 
 			redirect(base_url("admin"));
  
 		}else{

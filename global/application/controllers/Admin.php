@@ -23,6 +23,89 @@ class Admin extends CI_Controller
 		$this->load->view('footer');
 	}
 
+	public function update_profile()
+	{
+		$this->form_validation->set_rules('nama','Nama','trim|required');
+		// $this->form_validation->set_rules('last_name','Last Name','trim|required');
+		// $this->form_validation->set_rules('email','Email','trim|required|valid_email');
+		// $this->form_validation->set_rules('username','Username','trim|required|min_length[3]');
+		// $this->form_validation->set_rules('password', 'Password', 'required');
+		// $this->form_validation->set_rules('confirm_password', 'Confirm Password', 'required|matches[password]');
+		$data = array(
+			'nama' => $this->input->post('nama'),
+			'email' => $this->input->post('email'),
+			'password' => $this->input->post('password'),
+			'confirm_password' => NULL,
+			'bulan_tahun' => $this->input->post('bulan_tahun')
+		);
+
+        if($this->form_validation->run() == FALSE){
+            //Views
+			$this->load->view('header');
+            $this->load->view('admin/profile/index', $data);
+			$this->load->view('footer');
+        } else {
+            //Create Data Array
+			$id = $this->session->userdata('id_user');
+            $data = array(
+                'nama'    => $this->input->post('nama')
+                // 'last_name'     => $this->input->post('last_name'),
+                // 'username'      => $this->input->post('username'),
+                // 'password'      => md5($this->input->post('password')),
+                // 'group_id'      => $this->input->post('group'),
+                // 'email'         => $this->input->post('email')
+            );
+
+            //Table Insert
+			$where = array(
+				'id_user' => $id
+			);
+			$this->Mod_admin->update_profile($where, $data, 'tbl_user');
+
+
+            //Create Message
+            $this->session->set_flashdata('user_saved', 'User has been saved');
+			$login_user = $this->db->get_where('tbl_user',array('id_user'=> $id))->result();
+			foreach($login_user as $d){
+				$nama = $d->nama;
+				$id_user = $d->id_user;//Untuk mengambil ID User
+				$email = $d->email;
+				$password = $d->password;
+				$level_user = $d->level_user;
+				$bulan_tahun = $d->bulan_tahun;
+				
+			}
+			$data_session = array(
+				'nama' => $nama,
+				'status' => "login",
+				'id_user' => $id_user,
+				'email' => $email,
+				'password' => $password,
+				'level_user' => $level_user,
+				'bulan_tahun' => $bulan_tahun
+				);
+ 
+			$this->session->set_userdata($data_session);
+
+            //Redirect to pages
+            redirect('admin/profile');
+        }
+	}
+
+	public function profile()
+	{
+		$this->load->view('header');
+		$data = array(
+			'nama' => $this->session->userdata('nama'),
+			'email' => $this->session->userdata('email'),
+			'password' => $this->session->userdata('password'),
+			'confirm_password' => NULL,
+			'bulan_tahun' => $this->session->userdata('bulan_tahun')
+		);
+		$this->load->view('admin/profile/index',$data);
+		$this->load->view('footer');
+	}
+
 	public function project()
 	{
 		$this->load->view('header');

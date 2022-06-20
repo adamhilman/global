@@ -1,6 +1,11 @@
 <?php
 Class Mod_admin extends CI_Model{
 
+    function update_profile($where,$data,$table){
+		$this->db->where($where);
+		$this->db->update($table,$data);
+    }
+    
     function get_project(){
         $this->db->from('tbl_project');
         return $this->db->get();
