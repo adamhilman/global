@@ -9,7 +9,7 @@
                   <div class="col-sm-6">
                       <ol class="breadcrumb float-sm-right">
                           <li class="breadcrumb-item"><a href="<?php echo base_url()?>admin">Home</a></li>
-                          <li class="breadcrumb-item active">Project Add</li>
+                          <li class="breadcrumb-item active">Tambah Project</li>
                       </ol>
                   </div>
               </div>
@@ -23,7 +23,7 @@
                   <div class="col-md-12">
                       <div class="card card-primary">
                           <div class="card-header">
-                              <h3 class="card-title">General</h3>
+                              <h3 class="card-title">Tambah Data Project</h3>
                               <div class="card-tools">
                                   <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
                                       <i class="fas fa-minus"></i>
@@ -100,8 +100,8 @@
                               </div>
                               <div class="row">
                                   <div class="col-12">
-                                      <a href="<?php echo base_url()?>admin/project" class="btn btn-secondary">Cancel</a>
-                                      <input type="submit" value="Create new Porject" class="btn btn-success float-right">
+                                      <a href="<?php echo base_url()?>admin/project" class="btn btn-secondary">Batalkan</a>
+                                      <input type="submit" value="Tambah Project" class="btn btn-success float-right">
                                   </div>
                               </div>
                           </div>

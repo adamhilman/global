@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AdminLTE 3 | Log in (v2)</title>
+  <title>PT. Global Integrasi Data</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -21,11 +21,11 @@
 <div class="login-box">
   <!-- /.login-logo -->
   <div class="card card-outline card-primary">
-    <div class="card-header text-center">
-      <a href="../../index2.html" class="h1"><b>Admin</b>LTE</a>
+    <div class="card-header text-center" style="background: black">
+      <img src="<?php echo base_url() ?>assets/dist/img/logo-gid.jpg">
     </div>
     <div class="card-body">
-      <p class="login-box-msg">Sign in to start your session</p>
+      <p class="login-box-msg">Silahkan login untuk melanjutkan</p>
       <p><?php echo $this->session->flashdata("gagal_login"); ?></p>
 
       <form action="<?php echo base_url('Welcome/aksi_login'); ?>" method="post">
@@ -62,11 +62,6 @@
         </div>
       </form>
       <!-- /.social-auth-links -->
-
-      <p class="mb-1">
-        <a href="forgot-password.html">I forgot my password
-</a>
-      </p>
     </div>
     <!-- /.card-body -->
   </div>

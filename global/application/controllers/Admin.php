@@ -11,7 +11,7 @@ class Admin extends CI_Controller
 			redirect(base_url("Welcome"));
 		}
 		//load Helper for Form
-		$this->load->helper('url', 'form');
+		$this->load->helper('url', 'form', 'string');
 		$this->load->library('form_validation');
 		$this->load->model('Mod_admin');
 	}
@@ -23,38 +23,132 @@ class Admin extends CI_Controller
 		$this->load->view('footer');
 	}
 
+	public function data_karyawan()
+	{
+		$this->load->view('header');
+		$data['karyawan'] = $this->Mod_admin->get_karyawan()->result();
+		$this->load->view('admin/karyawan/index', $data);
+		$this->load->view('footer');
+	}
+	public function reset_user($id_user)
+	{
+            $data = array(
+				'password'      => md5('admin123'),);
+			$where = array(
+				'id_user' => $id_user
+			);
+			$this->Mod_admin->update_profile($where, $data, 'tbl_user');
+			
+            redirect('admin/data_karyawan');
+    }
+	public function edit_user($id_user)
+	{
+		$this->load->view('header');
+		$data['karyawan'] = $this->Mod_admin->get_user_data($id_user, 'tbl_user')->row();
+		$this->load->view('admin/karyawan/edit_user', $data);
+		$this->load->view('footer');
+    }
+
+	function update_user($id_user)
+	{
+		$this->form_validation->set_rules('nama_lengkap','Nama','trim|required');
+		$this->form_validation->set_rules('email','Email','trim|required|valid_email');
+		if($this->form_validation->run() == FALSE){
+        //Views
+		$this->edit_user($id_user);
+		// Jika tidak ada error validasi
+        } else {
+            //Create Data Array
+			$data = array(
+				'nama' => $this->input->post('nama_lengkap'),
+				'email' => $this->input->post('email'),
+				'bulan_tahun' => $this->input->post('bulan_tahun'),
+				'level_user' => $this->input->post('jabatan')
+			);
+		$where = array(
+			'id_user' => $id_user
+		);
+
+		$this->Mod_admin->update_user($where, $data, 'tbl_user');
+		redirect('admin/data_karyawan');
+		}
+	}
+	
+	public function tambah_karyawan()
+	{
+		$this->load->view('header');
+		$this->load->view('admin/karyawan/tambah_karyawan');
+		$this->load->view('footer');
+	}
+	public function add_karyawan()
+	{
+		$data = array(
+			'nama' => $this->input->post('nama_lengkap'),
+			'email' => $this->input->post('email'),
+			'bulan_tahun' => $this->input->post('bulan_tahun'),
+			'level_user' => $this->input->post('jabatan'),
+			'password' => md5("admin123")
+		);
+		$this->Mod_admin->insert_user($data);
+		redirect(base_url() . 'admin/data_karyawan');
+	}
+	function delete_user($id_user)
+	{
+		$where = array('id_user' => $id_user);
+		$this->Mod_admin->hapus_user($where, 'tbl_user');
+		redirect('admin/data_karyawan');
+	}
+
 	public function update_profile()
 	{
 		$this->form_validation->set_rules('nama','Nama','trim|required');
-		// $this->form_validation->set_rules('last_name','Last Name','trim|required');
-		// $this->form_validation->set_rules('email','Email','trim|required|valid_email');
-		// $this->form_validation->set_rules('username','Username','trim|required|min_length[3]');
-		// $this->form_validation->set_rules('password', 'Password', 'required');
-		// $this->form_validation->set_rules('confirm_password', 'Confirm Password', 'required|matches[password]');
-		$data = array(
-			'nama' => $this->input->post('nama'),
-			'email' => $this->input->post('email'),
-			'password' => $this->input->post('password'),
-			'confirm_password' => NULL,
-			'bulan_tahun' => $this->input->post('bulan_tahun')
-		);
-
+		$this->form_validation->set_rules('email','Email','trim|required|valid_email');
+		$password_changed = $this->input->post('password_changed');
+		if ($password_changed == "on"){
+			$this->form_validation->set_rules('password', 'Password', 'required');
+			$this->form_validation->set_rules('confirm_password', 'Confirm Password', 'required|matches[password]');
+			$this->session->set_flashdata('checkbox', 'style="display: flex"');
+			$this->session->set_flashdata('ganti_password', 'checked');
+			// Save data submit jika gagal password
+			$data = array(
+				'nama' => $this->input->post('nama'),
+				'email' => $this->input->post('email'),
+				'password' => $this->input->post('password'),
+				'confirm_password' => NULL,
+				'bulan_tahun' =>  $this->session->userdata('bulan_tahun')
+			);
+		} else {
+			// Save data submit gagal kalau gak pake password
+			$data = array(
+				'nama' => $this->input->post('nama'),
+				'email' => $this->input->post('email'),
+				'bulan_tahun' =>  $this->session->userdata('bulan_tahun')
+			);
+		}
+		
+		// Jika ada error valid form
         if($this->form_validation->run() == FALSE){
             //Views
 			$this->load->view('header');
             $this->load->view('admin/profile/index', $data);
 			$this->load->view('footer');
+		// Jika tidak ada error validasi
         } else {
             //Create Data Array
+			if ($password_changed == "on"){
 			$id = $this->session->userdata('id_user');
             $data = array(
-                'nama'    => $this->input->post('nama')
-                // 'last_name'     => $this->input->post('last_name'),
-                // 'username'      => $this->input->post('username'),
-                // 'password'      => md5($this->input->post('password')),
-                // 'group_id'      => $this->input->post('group'),
-                // 'email'         => $this->input->post('email')
-            );
+                'nama'    		=> $this->input->post('nama'),
+				'password'      => md5($this->input->post('password')),
+                'email'         => $this->input->post('email')
+            	);
+			}else{
+				$id = $this->session->userdata('id_user');
+            	$data = array(
+                'nama'    		=> $this->input->post('nama'),
+                'email'         => $this->input->post('email')
+				);
+			};
 
             //Table Insert
 			$where = array(
@@ -68,7 +162,7 @@ class Admin extends CI_Controller
 			$login_user = $this->db->get_where('tbl_user',array('id_user'=> $id))->result();
 			foreach($login_user as $d){
 				$nama = $d->nama;
-				$id_user = $d->id_user;//Untuk mengambil ID User
+				$id_user = $d->id_user; //Untuk mengambil ID User
 				$email = $d->email;
 				$password = $d->password;
 				$level_user = $d->level_user;
@@ -100,8 +194,14 @@ class Admin extends CI_Controller
 			'email' => $this->session->userdata('email'),
 			'password' => $this->session->userdata('password'),
 			'confirm_password' => NULL,
-			'bulan_tahun' => $this->session->userdata('bulan_tahun')
+			'bulan_tahun' => $this->session->userdata('bulan_tahun'),
+			'level_user' => $this->session->userdata('level_user')
+
 		);
+		$data['sisa_cuti'] = $this->db->get_where('tbl_user',array('id_user'=> $this->session->userdata('id_user')))->result();
+		
+		$this->session->set_flashdata('checkbox', 'style="display: none"');
+		$this->session->set_flashdata('ganti_password', '');
 		$this->load->view('admin/profile/index',$data);
 		$this->load->view('footer');
 	}
@@ -112,6 +212,18 @@ class Admin extends CI_Controller
 		$data['project'] = $this->Mod_admin->get_project()->result();
 		$this->load->view('admin/project/index', $data);
 		$this->load->view('footer');
+	}
+
+	public function add_aktivitas_project($id_project)
+	{
+		$data = array(
+			'keterangan' => $this->input->post('aktivitas'),
+			'id_project' => $id_project,
+			'id_user' => $this->session->userdata('id_user'),
+			'update_date' => 'mdate("%Y-%m-%d %H:%i:%s")'
+		);
+		$this->Mod_admin->insert_aktivitas_project($data);
+		$this->detail_project($id_project);
 	}
 
 	public function detail_project($id_project)
@@ -160,6 +272,7 @@ class Admin extends CI_Controller
 
 	public function upload_file_project($id_project)
 	{
+		$random_string = random_string('numeric',5);
 		$file = $_FILES['file_project']['name'];
 		$token = $this->input->post('token_file');
 		$this->load->library('image_lib');
@@ -167,7 +280,7 @@ class Admin extends CI_Controller
 		$config['allowed_types'] = 'gif|jpg|png|pdf|doc|docx|jpeg';
 		$config['overwrite'] = TRUE;
 		$config['remove_spaces'] = FALSE;
-		$config['file_name'] = $token;
+		$config['file_name'] = $random_string.$file;
 		$config['max_size'] = 10000;
 		$this->load->library('upload', $config);
 		$this->upload->initialize($config);
@@ -178,7 +291,7 @@ class Admin extends CI_Controller
 				$file_project = $file;
 				$data = array(
 					'token' => $token,
-					'nama_file' => $file_project,
+					'nama_file' => $random_string.$file_project,
 					'id_project' => $id_project
 				);
 				$this->Mod_admin->insert_file_project($data);
@@ -197,9 +310,9 @@ class Admin extends CI_Controller
 		if ($project_file->num_rows() > 0) {
 			$hasil = $project_file->row();
 			$nama_file = $hasil->nama_file;
-			$explode = explode('.', $nama_file);
-			$extid = end($explode);
-			if (file_exists($file = FCPATH . 'assets/upload/project/' . $token . '.' . $extid)) {
+			// $explode = explode('.', $nama_file);
+			// $extid = end($explode);
+			if (file_exists($file = FCPATH . 'assets/upload/project/' . $nama_file)) {
 				unlink($file);
 			}
 			$this->db->delete('tbl_file_project', array('token' => $token));
@@ -215,10 +328,10 @@ class Admin extends CI_Controller
 		if ($project_file->num_rows() > 0) {
 			$hasil = $project_file->row();
 			$nama_file = $hasil->nama_file;
-			$token = $hasil->token;
-			$explode = explode('.', $nama_file);
-			$extid = end($explode);
-			if (file_exists($file = FCPATH . 'assets/upload/project/' . $token . '.' . $extid)) {
+			// $token = $hasil->token;
+			// $explode = explode('.', $nama_file);
+			// $extid = end($explode);
+			if (file_exists($file = FCPATH . 'assets/upload/project/' . $nama_file)) {
 				unlink($file);
 			}
 			$this->db->delete('tbl_file_project', array('id_file' => $id_file));

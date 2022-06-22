@@ -29,14 +29,11 @@ class Welcome extends CI_Controller {
 				$password = $d->password;
 				$level_user = $d->level_user;
 				$bulan_tahun = $d->bulan_tahun;
-				
+				$sisa_cuti = $d->sisa_cuti;
 			}
 	
 		$cek = $this->mod_login->cek_login("tbl_user",$where)->num_rows();
-		
-
 		if($cek > 0){
- 
 			$data_session = array(
 				'nama' => $nama,
 				'status' => "login",
@@ -44,9 +41,9 @@ class Welcome extends CI_Controller {
 				'email' => $email,
 				'password' => $password,
 				'level_user' => $level_user,
-				'bulan_tahun' => $bulan_tahun
+				'bulan_tahun' => $bulan_tahun,
+				'sisa_cuti' => $sisa_cuti
 				);
- 
 			$this->session->set_userdata($data_session);
 			redirect(base_url("admin"));
  
