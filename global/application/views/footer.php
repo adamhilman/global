@@ -12,7 +12,11 @@
 <!-- /.control-sidebar -->
 </div>
 <!-- ./wrapper -->
-
+<?php 
+ $halaman = $this->uri->segment('2');
+ $tanggal = date('d M Y H:i:s');
+ $cetak = $halaman."-".$tanggal;
+?>
 <!-- jQuery -->
 <script src="<?php echo base_url() ?>assets/plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap 4 -->
@@ -30,6 +34,7 @@
 <script src="<?php echo base_url() ?>assets/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
 <script src="<?php echo base_url() ?>assets/plugins/datatables-buttons/js/buttons.print.min.js"></script>
 <script src="<?php echo base_url() ?>assets/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+<script src="<?php echo base_url() ?>assets/plugins/datatables-select/js/dataTables.select.min.js"></script>
 <!-- dropzonejs -->
 <script src="<?php echo base_url() ?>assets/plugins/dropzone/min/dropzone.min.js"></script>
 <!-- InputMask -->
@@ -84,7 +89,32 @@
 		"responsive": true,
 		"lengthChange": false,
 		"autoWidth": false,
-		"buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+		"buttons": [
+			{
+                extend: 'excel',
+				exportOptions: {
+                    columns: ':visible'
+                },
+                title: '<?php echo $cetak?>'
+            },
+            {
+                extend: 'pdfHtml5',
+				exportOptions: {
+                    columns: ':visible'
+                },
+                title: '<?php echo $cetak?>'
+            }, "colvis",
+			{
+                extend: 'excel',
+                text: 'Export all',
+                exportOptions: {
+                    modifier: {
+                        selected: null
+                    }
+                }
+            }],
+			"select": true
+
 	}).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 
 	$("#claim").DataTable({

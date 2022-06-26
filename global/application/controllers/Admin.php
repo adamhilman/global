@@ -220,7 +220,7 @@ class Admin extends CI_Controller
 			'keterangan' => $this->input->post('aktivitas'),
 			'id_project' => $id_project,
 			'id_user' => $this->session->userdata('id_user'),
-			'update_date' => 'mdate("%Y-%m-%d %H:%i:%s")'
+			'update_date' => date("Y-m-d H:i:s")
 		);
 		$this->Mod_admin->insert_aktivitas_project($data);
 		$this->detail_project($id_project);
@@ -387,78 +387,201 @@ class Admin extends CI_Controller
 	public function form_cuti()
 	{
 		$this->load->view('header');
-		$this->load->view('admin/formulir_cuti/index');
+		$id_user = $this->session->userdata('id_user');
+		$data['cuti'] = $this->Mod_admin->get_cuti_user($id_user)->result();
+		$this->load->view('admin/formulir_cuti/index', $data);
 		$this->load->view('footer');
 	}
 
+	public function tambah_cuti()
+	{
+		$this->load->view('header');
+		$this->load->view('admin/formulir_cuti/tambah_cuti');
+		$this->load->view('footer');
+	}
+	public function add_cuti()
+	{
+		$data = array(
+			'tanggal_mulai' => $this->input->post('tanggal_mulai'),
+			'tanggal_selesai' => $this->input->post('tanggal_selesai'),
+			'keterangan' => $this->input->post('keterangan'),
+			'jumlah_hari' => $this->input->post('jumlah_hari'),
+			'id_user' => $this->session->userdata('id_user')
+		);
+		$this->Mod_admin->insert_cuti($data);
+		redirect(base_url() . 'admin/form_cuti');
+	}
+
+	public function edit_cuti($id_cuti)
+	{
+		$this->load->view('header');
+		$data['cuti'] = $this->Mod_admin->detail_cuti($id_cuti, 'tbl_form_cuti')->row();
+		$this->load->view('admin/formulir_cuti/edit_cuti', $data);
+		$this->load->view('footer');
+	}
+
+	function update_cuti()
+	{
+		$data = array(
+			'tanggal_mulai' => $this->input->post('tanggal_mulai'),
+			'tanggal_selesai' => $this->input->post('tanggal_selesai'),
+			'keterangan' => $this->input->post('keterangan'),
+			'jumlah_hari' => $this->input->post('jumlah_hari'));
+
+		$where = array(
+			'id_cuti' => $this->input->post('id_cuti')
+		);
+
+		$this->Mod_admin->update_cuti($where, $data, 'tbl_form_cuti');
+		redirect('admin/form_cuti');
+	}
+
+	function delete_cuti($id_cuti)
+	{
+		$where = array('id_cuti' => $id_cuti);
+		$this->Mod_admin->hapus_cuti($where, 'tbl_user');
+		redirect('admin/form_cuti');
+	}
+
+	
 	public function claim()
 	{
 		$this->load->view('header');
-		$this->load->view('admin/claim_kerja/index');
+		$id_user = $this->session->userdata('id_user');
+		$data['claim'] = $this->Mod_admin->get_claim($id_user)->result();
+		$this->load->view('admin/claim_kerja/index', $data);
 		$this->load->view('footer');
 	}
 
 	public function tambah_claim()
 	{
 		$this->load->view('header');
-		$data['project'] = $this->Mod_admin->get_project()->result();
+		$data = array(
+			'keterangan' => "",
+			'nominal' => "",
+			'id_project' => "",
+			'project' => $this->Mod_admin->get_project()->result()
+		);
 		$this->load->view('admin/claim_kerja/tambah_claim', $data);
 		$this->load->view('footer');
 	}
 
 	public function simpan_claim()
 	{
-		$this->load->helper('string');
-		$id_file = random_string('alnum', 16);
-
-		// Ambil data yang dikirim dari form
-		$nama_paket = $_POST['nama_paket'];
-		$nominal_claim = $_POST['nominal_claim'];
-		$keterangan = $_POST['keterangan'];
+		$this->form_validation->set_rules('nominal_claim','Nominal','trim|required');
+		$this->form_validation->set_rules('keterangan','Keterangan','trim|required');
+		$random_string = random_string('numeric',5);
 		$file_claim = $_FILES['file_claim']['name'];
-
-		//Insert ke dalam table claim
-		$data_claim = array(
-			'id_project' => $nama_paket,
-			'user_id' => '1'
+		$data = array(
+			'keterangan' => $this->input->post('keterangan'),
+			'nominal' => $this->input->post('nominal_claim'),
+			'id_project' => $this->input->post('nama_paket'),
+			'tanggal_pengajuan' => date("Y-m-d H:i:s"),
+			'id_user' => $this->session->userdata('id_user'),
+			'status' => "0",
+			'file_rembes' => $random_string.$file_claim
 		);
-		$this->db->insert('tbl_claim', $data_claim);
-		$last_id = $this->db->insert_id();
-
-		//Masukkan ke dalam table detail claim
+		if (empty($_FILES['file_claim']['name']))
+		{
+			$this->form_validation->set_rules('file_claim', 'File Invoice', 'required');
+		}
+		//Upload
 		$config['upload_path']          = 'assets/upload/claim';
 		$config['allowed_types']        = 'gif|jpg|jpeg|pdf|png';
 		$config['max_size']             = 5000;
-		$config['encrypt_name'] 		= true;
+		$config['file_name'] 			= $random_string.$file_claim;
 		$this->load->library('upload',$config);
-		$jumlah_file = count($_FILES['file_claim']['name']);
-		for($i = 0; $i < $jumlah_file;$i++)
-		{
-            if(!empty($_FILES['file_claim']['name'][$i])){
- 
-				$_FILES['file']['name'] = $_FILES['file_claim']['name'][$i];
-				$_FILES['file']['type'] = $_FILES['file_claim']['type'][$i];
-				$_FILES['file']['tmp_name'] = $_FILES['file_claim']['tmp_name'][$i];
-				$_FILES['file']['error'] = $_FILES['file_claim']['error'][$i];
-				$_FILES['file']['size'] = $_FILES['file_claim']['size'][$i];
-				
-				if($this->upload->do_upload('file')){
-					$uploadData = $this->upload->data();
-					$data['file_claim'] = $uploadData['file_name'];
-					$data['id_claim'] = $last_id;
-					$data['keterangan'] = $keterangan[$i];
-					$data['nominal'] = $nominal_claim[$i];
-					$this->session->set_flashdata('notif_claim', 'disubmit', 'Success');
-					$this->db->insert('tbl_detail_claim',$data);
-				}else{
-					$this->session->set_flashdata('notif_claim', $this->upload->display_errors(), 'fail');
-					// $error = array('error' => $this->upload->display_errors());
 
-					// print_r($error);
-					// exit;
-				}
+		if($this->form_validation->run() == FALSE){
+			$this->load->view('header');
+			$data['project'] = $this->Mod_admin->get_project()->result();
+			$this->load->view('admin/claim_kerja/tambah_claim', $data);
+			$this->load->view('footer');
+		}else{
+			if($this->upload->do_upload('file_claim')){
+				$this->session->set_flashdata('notif_claim', 'disubmit', 'Success');
+				$this->db->insert('tbl_form_reimburstment', $data);
+				redirect('admin/claim');
+			}else{
+				$this->session->set_flashdata('notif_claim', $this->upload->display_errors(), 'fail');
+				redirect('admin/claim');
+				// $error = array('error' => $this->upload->display_errors());
+
+				// print_r($error);
+				// exit;
 			}
 		}
+				
+	}
+
+	public function edit_claim($id_rembes)
+	{
+		$this->load->view('header');
+		$data['project'] = $this->Mod_admin->get_project()->result();
+		$data['claim'] = $this->Mod_admin->detail_claim($id_rembes, 'tbl_form_reimburstment')->row();
+		$this->load->view('admin/claim_kerja/edit_claim', $data);
+		$this->load->view('footer');
+	}
+
+	public function update_claim()
+	{ 
+		// Ambil data yang dikirim dari form
+		$this->form_validation->set_rules('nominal_claim','Nominal','trim|required');
+		$this->form_validation->set_rules('keterangan','Keterangan','trim|required');
+		$where = array(
+			'id_rembes' => $this->input->post('id_rembes')
+		);
+		$random_string = random_string('numeric',5);
+		$file_claim = $_FILES['file_claim']['name'];
+		if($this->form_validation->run() == FALSE){
+			$data = array(
+				'keterangan' => $this->input->post('keterangan'),
+				'nominal' => $this->input->post('nominal_claim'),
+				'id_project' => $this->input->post('nama_paket'),
+				'file_rembes' => $random_string.$file_claim
+			);
+			$this->load->view('header');
+			$data['project'] = $this->Mod_admin->get_project()->result();
+			$this->load->view('admin/claim_kerja/tambah_claim', $data);
+			$this->load->view('footer');
+		}else{
+		// Jika file tidak di upload, maka masukkan nominal sama keterangan
+			if (empty($_FILES['file_claim']['name'])){
+				$data = array(
+					'keterangan' => $this->input->post('keterangan'),
+					'nominal' => $this->input->post('nominal_claim'),
+					'id_project' => $this->input->post('nama_paket'),
+					'status' => "0"
+				);
+				$this->Mod_admin->update_claim($where, $data, 'tbl_form_reimburstment');
+				redirect('admin/claim');
+			}else{
+				//Upload
+				$config['upload_path']          = 'assets/upload/claim';
+				$config['allowed_types']        = 'gif|jpg|jpeg|pdf|png';
+				$config['max_size']             = 5000;
+				$config['file_name'] 			= $random_string.$file_claim;
+				$this->load->library('upload',$config);
+						if($this->upload->do_upload('file_claim')){
+							$this->session->set_flashdata('notif_claim', 'disubmit', 'Success');
+							$this->db->insert('tbl_form_reimburstment', $data_claim);
+							redirect('admin/claim');
+						}else{
+							$this->session->set_flashdata('notif_claim', $this->upload->display_errors(), 'fail');
+							$error = array('error' => $this->upload->display_errors());
+
+							print_r($error);
+							exit;
+						}
+			}
+		}
+		
+	}
+
+	function delete_claim($id_rembes)
+	{
+		$where = array('id_rembes' => $id_rembes);
+		$this->Mod_admin->hapus_claim($where, 'tbl_form_reimburstment');
 		redirect('admin/claim');
 	}
 

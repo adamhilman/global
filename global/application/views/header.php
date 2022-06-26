@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="<?php echo base_url() ?>assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
   <link rel="stylesheet" href="<?php echo base_url() ?>assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
   <link rel="stylesheet" href="<?php echo base_url() ?>assets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+  <link rel="stylesheet" href="<?php echo base_url() ?>assets/plugins/datatables-select/css/select.bootstrap4.min.css">
   <!-- dropzonejs -->
   <link rel="stylesheet" href="<?php echo base_url() ?>assets/plugins/dropzone/min/dropzone.min.css">
   <!-- Theme style -->
@@ -118,7 +119,6 @@
                 <i class="nav-icon fa fa-calendar"></i>
                 <p>
                   Formulir Cuti
-                  <i class="fas fa-angle-left right"></i>
                 </p>
               </a>
             </li>
@@ -131,12 +131,20 @@
                 </p>
               </a>
             </li>
-            <li class="nav-header">Project Detail</li>
+            <li class="nav-header">Laporan</li>
             <li class="nav-item">
-              <a href="<?php echo base_url() ?>" class="nav-link">
-                <i class="nav-icon fa fa-calendar"></i>
+              <a href="<?php echo base_url() ?>welcome/logout" class="nav-link">
+                <i class="nav-icon fas fa-book"></i>
                 <p>
-                  Project A
+                  Cuti
+                </p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="<?php echo base_url() ?>welcome/logout" class="nav-link">
+                <i class="nav-icon fas fa-book"></i>
+                <p>
+                Reimburstment
                 </p>
               </a>
             </li>

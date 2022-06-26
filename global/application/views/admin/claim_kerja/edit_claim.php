@@ -9,7 +9,7 @@
                   <div class="col-sm-6">
                       <ol class="breadcrumb float-sm-right">
                           <li class="breadcrumb-item"><a href="<?php echo base_url() ?>admin">Home</a></li>
-                          <li class="breadcrumb-item active">Ajukan Claim</li>
+                          <li class="breadcrumb-item active">Edit Claim</li>
                       </ol>
                   </div>
               </div>
@@ -18,12 +18,12 @@
 
       <!-- Main content -->
       <section class="content">
-          <form action="<?php echo base_url() ?>admin/simpan_claim" method="POST" enctype="multipart/form-data">
+          <form action="<?php echo base_url() ?>admin/update_claim" method="POST" enctype="multipart/form-data">
               <div class="row">
                   <div class="col-md-12">
                       <div class="card card-primary">
                           <div class="card-header">
-                              <h3 class="card-title">Claim Kunjungan Kerja</h3>
+                              <h3 class="card-title">Edit Claim Kunjungan Kerja</h3>
                               <div class="card-tools">
                                   <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
                                       <i class="fas fa-minus"></i>
@@ -55,24 +55,21 @@
                                           </thead>
                                           <tbody>
                                               <tr>
-                                                  <td><input type="text" id="nominal_claim" name="nominal_claim" class="form-control" value="<?php echo $nominal;?>">
-                                                  <?php echo form_error('nominal_claim'); ?>
-                                                    </td>
+                                                  <td><input type="text" id="nominal_claim" name="nominal_claim" class="form-control" value="<?php echo $claim->nominal;?>"></td>
                                                   <td>
-                                                      <textarea name="keterangan" rows="4" class="form-control"><?php echo $keterangan;?></textarea>
-                                                      <?php echo form_error('keterangan'); ?>
+                                                      <textarea name="keterangan" rows="4" class="form-control"><?php echo $claim->keterangan;?></textarea>
                                                   </td>
-                                                  <td><input type="file" name="file_claim" class="form-control">
-                                                  <?php echo form_error('file_claim'); ?>
-                                                    <p><i>*Mohon file invoice tidak lebih dari 5MB.</i></p></td>
+                                                  <td><input type="file" name="file_claim" class="form-control"><?php echo $claim->file_rembes;?>
+                                                    <p><i>*Mohon upload invoice tidak lebih dari 5MB.</i></p></td>
                                           </tbody>
                                       </table>
                                   </div>
                           </div>
                           <div class="row">
                               <div class="col-12">
+                              <input type="hidden" name="id_rembes" value="<?php echo $claim->id_rembes;?>">
                                   <a href="<?php echo base_url() ?>admin/claim" class="btn btn-secondary">Cancel</a>
-                                  <input type="submit" value="Ajukan Claim" class="btn btn-success float-right">
+                                  <input type="submit" value="Edit Claim" class="btn btn-success float-right">
                               </div>
                           </div>
                       </div>

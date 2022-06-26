@@ -28,7 +28,7 @@
                         <h3 class="card-title">Formulir Cuti Kerja</h3>
                     </div>
                     <div class="col-md-2">
-                        <a href="<?php echo base_url()?>admin/tambah_claim">
+                        <a href="<?php echo base_url()?>admin/tambah_cuti">
                         <button type="button" class="btn btn-block btn-primary btn-xs">Ajukan Cuti Kerja</button>
                         </a>
                     </div>
@@ -36,28 +36,46 @@
 
             </div>
             <div class="card-body">
-            <table id="example1" class="table table-bordered table-striped">
+            <table style="text-align: center;" id="example1" class="table table-bordered table-striped">
                                   <thead>
                                       <tr>
                                         <th>No.</th>
                                           <th>Nama Pegawai</th>
                                           <th>Jumlah Hari</th>
+                                          <th>Keterangan</th>
                                           <th>Tanggal Cuti</th>
                                           <th>Approval Proyek Manajer</th>
                                           <th>Approval Direktur</th>
                                           <th>Aksi</th>
                                       </tr>
                                   </thead>
-                                  <tbody>
-                                      <tr>
-                                      <td>1</td>
-                                          <td>Win 95+</td>
-                                          <td> 4</td>
-                                          <td>X</td>
-                                          <td>X</td>
-                                          <td>X</td>
-                                          <td><a href="<?php base_url()?>detail_project/">Detail</td>
+                                  <tbody ><?php $no=1; foreach ($cuti as $c) :?>
+                                      <tr name="<?php echo $c->id_user?>">
+                                        <td><?php echo $no?></td>
+                                        <td><?php echo $c->nama;?></td>
+                                        <td><?php echo $c->jumlah_hari;?></td>
+                                        <td><?php echo $c->keterangan;?></td>
+                                        <td><?php echo $c->tanggal_mulai;?> - <?php echo $c->tanggal_selesai;?></td>
+                                        <td>
+                                            <?php if ($c->approval_pm == 0){
+                                                echo '<i class="fas fa-hourglass-half"></i> Menunggu disetujui';
+                                            }elseif ($c->approval_pm == 1){
+                                                echo '<i class="fas fa-check"></i>';
+                                            }else{echo "Error";};?>
+                                        </td>
+                                        <td>
+                                            <?php if ($c->approval_direksi == 0){
+                                                echo '<i class="fas fa-hourglass-half"></i> Menunggu disetujui';
+                                            }elseif ($c->approval_direksi == 1){
+                                                echo '<i class="fas fa-check"></i>';
+                                            }else{echo "Error";};?>
+                                        </td>
+                                        <td>
+                                            <a href="<?php base_url()?>edit_cuti/<?php echo $c->id_cuti;?>"><i class="fas fa-edit" title="Edit"></i></a>
+                                            <a href="<?php base_url()?>delete_cuti/<?php echo $c->id_cuti;?>" onclick="return confirm('Batalkan cuti?');"><i class="fas fa-trash" title="Delete"></i></a>
+                                        </td>
                                       </tr>
+                                      <?php $no++; endforeach?>
                                   </tbody>
                               </table>
                
