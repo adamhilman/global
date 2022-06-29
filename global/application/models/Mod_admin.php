@@ -1,6 +1,10 @@
 <?php
 Class Mod_admin extends CI_Model{
 
+    function cek_cuti_terakhir($table,$where){		
+		return $this->db->get_where($table,$where);
+	}	
+    
     function update_profile($where,$data,$table){
 		$this->db->where($where);
 		$this->db->update($table,$data);
@@ -9,6 +13,14 @@ Class Mod_admin extends CI_Model{
     function get_project(){
         $this->db->from('tbl_project');
         return $this->db->get();
+    }
+
+    function get_cuti_all(){
+        return $this->db->query("select tbl_form_cuti.*,tbl_user.nama FROM tbl_form_cuti LEFT JOIN tbl_user ON tbl_form_cuti.id_user = tbl_user.id_user");
+    }
+
+    function get_cuti_all_teknisi(){
+        return $this->db->query("select tbl_form_cuti.*, tbl_user.level_user FROM tbl_form_cuti LEFT JOIN tbl_user ON tbl_form_cuti.id_user = tbl_user.id_user where tbl_user.level_user = 6");
     }
 
     function get_karyawan(){
@@ -31,10 +43,17 @@ Class Mod_admin extends CI_Model{
         $this->db->where($where);
         $this->db->delete($table);
     }
+    function hapus_history($where,$table){
+        $this->db->where($where);
+        $this->db->delete($table);
+    }
     function detail_project($id){
         $this->db->from('tbl_project');
         $this->db->where('id_project', $id);
         return $this->db->get();
+    }
+    function history_project($id){
+        return $this->db->query("SELECT tbl_aktivitas_project.*, tbl_user.nama FROM tbl_aktivitas_project LEFT JOIN tbl_user on tbl_aktivitas_project.id_user = tbl_user.id_user WHERE id_project = $id");
     }
 
     function detail_file_project($id){
@@ -84,6 +103,10 @@ Class Mod_admin extends CI_Model{
 		$this->db->update($table,$data);
 	}
 
+    function reset_cuti($data,$table){
+		$this->db->update($table,$data);
+	}
+
     function hapus_cuti($where,$table){
         $this->db->where($where);
         $this->db->delete($table);
@@ -92,7 +115,9 @@ Class Mod_admin extends CI_Model{
     function get_claim($id_user){
         return $this->db->query("SELECT tbl_form_reimburstment.*, tbl_project.nama_paket FROM tbl_form_reimburstment LEFT JOIN tbl_project on tbl_form_reimburstment.id_project = tbl_project.id_project WHERE id_user=$id_user");
     }
-
+    function get_claim_all(){
+        return $this->db->query("SELECT tbl_form_reimburstment.*, tbl_project.nama_paket, tbl_user.nama FROM tbl_form_reimburstment LEFT JOIN tbl_project on tbl_form_reimburstment.id_project = tbl_project.id_project LEFT JOIN tbl_user on tbl_form_reimburstment.id_user = tbl_user.id_user order by status");
+    }
     function detail_claim($id_rembes){
         $this->db->from('tbl_form_reimburstment');
         $this->db->where('id_rembes', $id_rembes);

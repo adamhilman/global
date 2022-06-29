@@ -64,7 +64,7 @@
   							<div class="row">
   								<div class="col-12">
                                   <input type="hidden" name="id_cuti" value="<?php echo $cuti->id_cuti?>">
-
+								  <input type="hidden" name="jumlah_hari_before" value="<?php echo $cuti->jumlah_hari?>">
   									<a href="<?php echo base_url()?>admin/form_cuti"
   										class="btn btn-secondary">Batalkan</a>
   									<input type="submit" value="Edit Cuti"

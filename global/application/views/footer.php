@@ -116,8 +116,7 @@
 			"select": true
 
 	}).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-
-	$("#claim").DataTable({
+		$("#claim").DataTable({
 		"responsive": true,
 		"lengthChange": false,
 		"searching": false,
@@ -129,6 +128,18 @@
 	$('#simpan_file').click(function () {
 		location.reload();
 	});
+	$(document).ready( function () {
+    $('#example2').DataTable({
+		"responsive": true,
+	});});
+	$(document).ready( function () {
+    $('#cuti_pm').DataTable({
+		"responsive": true,
+	});});
+	$(document).ready( function () {
+    $('#cuti_hrd').DataTable({
+		"responsive": true,
+	});});
 </script>
 <script type="text/javascript">
 	$(document).ready(function () {
@@ -215,13 +226,22 @@
 </script>
 <script type="text/javascript">
 	$(document).ready(function () {
-
 		const flashData = $('.flash-data').data('flashdata');
 		if (flashData) {
 			swal({
 				title: 'Success',
 				text: 'Data Berhasil ' + flashData,
-				icon: 'success'
+				type: 'info'
+			});
+		} //rencana saya kasih else untuk notif data yg gagal
+	});
+	$(document).ready(function () {
+		const flashData = $('.flash-data-cuti').data('flashdata');
+		if (flashData) {
+			swal({
+				title: 'Gagal',
+				text: flashData,
+				type: 'warning'
 			});
 		} //rencana saya kasih else untuk notif data yg gagal
 	});

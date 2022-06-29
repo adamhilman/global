@@ -89,6 +89,7 @@ class Admin extends CI_Controller
 			'level_user' => $this->input->post('jabatan'),
 			'password' => md5("admin123")
 		);
+		$this->session->set_flashdata('notif', 'di tambah', 'Success');
 		$this->Mod_admin->insert_user($data);
 		redirect(base_url() . 'admin/data_karyawan');
 	}
@@ -226,6 +227,14 @@ class Admin extends CI_Controller
 		$this->detail_project($id_project);
 	}
 
+	function delete_history($id_project, $id_aktivitas)
+	{
+		$where = array('id_aktivitas' => $id_aktivitas);
+		$this->Mod_admin->hapus_history($where, 'tbl_aktivitas_project');
+		$this->session->set_flashdata('notif', 'di hapus', 'Success');
+		redirect('admin/detail_project/'.$id_project);
+	}
+
 	public function detail_project($id_project)
 	{
 		// untuk mengambil id_project untuk mengembalikan halaman setelah hapus file
@@ -239,6 +248,7 @@ class Admin extends CI_Controller
 		$id_project = $this->uri->segment('3');
 		$this->load->view('header');
 		$data['project'] = $this->Mod_admin->detail_project($id_project, 'tbl_project')->row();
+		$data['riwayat'] = $this->Mod_admin->history_project($id_project)->result();
 		$data['file_project'] = $this->Mod_admin->detail_file_project($id_project)->result();
 		$this->load->view('admin/project/detail_project', $data);
 		$this->load->view('footer');
@@ -266,6 +276,7 @@ class Admin extends CI_Controller
 			'selesai_kontrak' => $this->input->post('selesai_kontrak'),
 			'serah_terima' => $this->input->post('serah_terima'),
 		);
+		$this->session->set_flashdata('notif', 'di tambah', 'Success');
 		$this->Mod_admin->insert_project($data);
 		redirect(base_url() . 'admin/project');
 	}
@@ -370,7 +381,7 @@ class Admin extends CI_Controller
 		$where = array(
 			'id_project' => $id
 		);
-
+		$this->session->set_flashdata('notif', 'di update', 'Success');
 		$this->Mod_admin->update_project($where, $data, 'tbl_project');
 		redirect('admin/project');
 	}
@@ -389,8 +400,55 @@ class Admin extends CI_Controller
 		$this->load->view('header');
 		$id_user = $this->session->userdata('id_user');
 		$data['cuti'] = $this->Mod_admin->get_cuti_user($id_user)->result();
+		$data['acc_pm'] = $this->Mod_admin->get_cuti_all_teknisi()->result();
+		$data['acc_hrd'] = $this->Mod_admin->get_cuti_all()->result();
 		$this->load->view('admin/formulir_cuti/index', $data);
 		$this->load->view('footer');
+	}
+	
+	function acc_cuti_pm($id_cuti)
+	{
+		$data = array(
+			'approval_pm' => "1"
+		);
+		$where = array('id_cuti' => $id_cuti);
+		$this->Mod_admin->update_cuti($where, $data, 'tbl_form_cuti');
+		$this->session->set_flashdata('notif', 'di setujui', 'Success');
+		redirect('admin/form_cuti');
+	}
+
+	function cancel_cuti_pm($id_cuti)
+	{
+		$data = array(
+			'approval_pm' => "0"
+		);
+		$where = array('id_cuti' => $id_cuti);
+		$this->Mod_admin->update_cuti($where, $data, 'tbl_form_cuti');
+		$this->session->set_flashdata('notif', 'di batalkan', 'Success');
+		redirect('admin/form_cuti');
+	}
+
+	function acc_cuti_hrd($id_cuti)
+	{
+		$data = array(
+			'approval_direksi' => "1"
+		);
+		$where = array('id_cuti' => $id_cuti);
+		$this->Mod_admin->update_cuti($where, $data, 'tbl_form_cuti');
+		$this->session->set_flashdata('notif', 'di setujui', 'Success');
+		redirect('admin/form_cuti');
+	}
+
+	function cancel_cuti_hrd($id_cuti)
+	{
+		$data = array(
+			'approval_direksi' => "0"
+		);
+		
+		$where = array('id_cuti' => $id_cuti);
+		$this->Mod_admin->update_cuti($where, $data, 'tbl_form_cuti');
+		$this->session->set_flashdata('notif', 'di batalkan', 'Success');
+		redirect('admin/form_cuti');
 	}
 
 	public function tambah_cuti()
@@ -401,14 +459,39 @@ class Admin extends CI_Controller
 	}
 	public function add_cuti()
 	{
+		$jumlah_hari = $this->input->post('jumlah_hari');
+		$level_user = $this->session->userdata('level_user');
+		$id_user = $this->session->userdata('id_user');
+		$user_cuti = $this->db->get_where('tbl_user',array('id_user'=> $id_user))->row();
+		$sisa_cuti = $user_cuti->sisa_cuti;
+		if ($sisa_cuti >= $jumlah_hari){
+		$hasil_sisa = $sisa_cuti - $jumlah_hari;
+			if ( $level_user == 6){
+				$data = array(
+				'tanggal_mulai' => $this->input->post('tanggal_mulai'),
+				'tanggal_selesai' => $this->input->post('tanggal_selesai'),
+				'keterangan' => $this->input->post('keterangan'),
+				'jumlah_hari' => $jumlah_hari,
+				'id_user' => $this->session->userdata('id_user')
+			);}
 		$data = array(
 			'tanggal_mulai' => $this->input->post('tanggal_mulai'),
 			'tanggal_selesai' => $this->input->post('tanggal_selesai'),
 			'keterangan' => $this->input->post('keterangan'),
-			'jumlah_hari' => $this->input->post('jumlah_hari'),
-			'id_user' => $this->session->userdata('id_user')
+			'jumlah_hari' => $jumlah_hari,
+			'id_user' => $this->session->userdata('id_user'),
+			'approval_pm' => "1",
 		);
+		$data_user = array(
+			'sisa_cuti' => $hasil_sisa
+		);
+		$where_user = array('id_user' => $id_user);
+		$this->session->set_flashdata('notif', 'di tambah', 'Success');
 		$this->Mod_admin->insert_cuti($data);
+		$this->Mod_admin->update_user($where_user, $data_user, 'tbl_user');
+		}else{
+			$this->session->set_flashdata('notif_cuti', 'Harap periksa sisa cuti pada halaman profile', 'Error');
+		}
 		redirect(base_url() . 'admin/form_cuti');
 	}
 
@@ -422,33 +505,74 @@ class Admin extends CI_Controller
 
 	function update_cuti()
 	{
+		$id_cuti = $this->input->post('id_cuti');
+		$jumlah_hari = $this->input->post('jumlah_hari');
+		$jumlah_cuti_before = $this->input->post('jumlah_hari_before');
+		$id_user = $this->session->userdata('id_user');
+		$user_cuti = $this->db->get_where('tbl_user',array('id_user'=> $id_user))->row();
+		$sisa_cuti = $user_cuti->sisa_cuti;
+		$perhitungan = ($sisa_cuti + $jumlah_cuti_before) - $jumlah_hari;
+		
 		$data = array(
 			'tanggal_mulai' => $this->input->post('tanggal_mulai'),
 			'tanggal_selesai' => $this->input->post('tanggal_selesai'),
 			'keterangan' => $this->input->post('keterangan'),
-			'jumlah_hari' => $this->input->post('jumlah_hari'));
+			'jumlah_hari' => $jumlah_hari);
 
 		$where = array(
-			'id_cuti' => $this->input->post('id_cuti')
+			'id_cuti' => $id_cuti
 		);
-
 		$this->Mod_admin->update_cuti($where, $data, 'tbl_form_cuti');
+
+		$data_user = array(
+			'sisa_cuti' => $perhitungan);
+		$where_user = array(
+			'id_user' => $id_user
+		);
+		$this->Mod_admin->update_user($where_user, $data_user, 'tbl_user');
+
+		$this->session->set_flashdata('notif', 'di update', 'Success');
 		redirect('admin/form_cuti');
 	}
 
 	function delete_cuti($id_cuti)
 	{
+		$id_user = $this->session->userdata('id_user');
+		$cuti_user = $this->db->get_where('tbl_form_cuti',array('id_cuti'=> $id_cuti))->row();
+		$jumlah_cuti = $cuti_user->jumlah_hari;
+		$user_cuti = $this->db->get_where('tbl_user',array('id_user'=> $id_user))->row();
+		$sisa_cuti = $user_cuti->sisa_cuti;
+		$hasil_cuti = $jumlah_cuti + $sisa_cuti;
+		
 		$where = array('id_cuti' => $id_cuti);
-		$this->Mod_admin->hapus_cuti($where, 'tbl_user');
+		$this->Mod_admin->hapus_cuti($where, 'tbl_form_cuti');
+
+		$data_user = array(
+			'sisa_cuti' => $hasil_cuti
+		);
+		$where_user = array('id_user' => $id_user);
+		$this->Mod_admin->update_user($where_user, $data_user, 'tbl_user');
+		$this->session->set_flashdata('notif', 'di hapus', 'Success');
 		redirect('admin/form_cuti');
 	}
 
-	
+	function reset_cuti()
+	{
+		$data = array(
+			'sisa_cuti' => "12"
+		);
+		
+		$this->Mod_admin->reset_cuti($data, 'tbl_user');
+		$this->session->set_flashdata('notif', 'di reset', 'Success');
+		redirect('admin/form_cuti');
+	}
+
 	public function claim()
 	{
 		$this->load->view('header');
 		$id_user = $this->session->userdata('id_user');
 		$data['claim'] = $this->Mod_admin->get_claim($id_user)->result();
+		$data['claim_all'] = $this->Mod_admin->get_claim_all()->result();
 		$this->load->view('admin/claim_kerja/index', $data);
 		$this->load->view('footer');
 	}
@@ -499,11 +623,11 @@ class Admin extends CI_Controller
 			$this->load->view('footer');
 		}else{
 			if($this->upload->do_upload('file_claim')){
-				$this->session->set_flashdata('notif_claim', 'disubmit', 'Success');
+				$this->session->set_flashdata('notif', 'disubmit', 'Success');
 				$this->db->insert('tbl_form_reimburstment', $data);
 				redirect('admin/claim');
 			}else{
-				$this->session->set_flashdata('notif_claim', $this->upload->display_errors(), 'fail');
+				$this->session->set_flashdata('notif', $this->upload->display_errors(), 'fail');
 				redirect('admin/claim');
 				// $error = array('error' => $this->upload->display_errors());
 
@@ -514,6 +638,28 @@ class Admin extends CI_Controller
 				
 	}
 
+	function acc_claim($id_rembes)
+	{
+		$data = array(
+			'status' => "1"
+		);
+		$where = array('id_rembes' => $id_rembes);
+		$this->Mod_admin->update_claim($where, $data, 'tbl_form_reimburstment');
+		$this->session->set_flashdata('notif', 'di setujui', 'Success');
+		redirect('admin/claim');
+	}
+
+	function cancel_claim($id_rembes)
+	{
+		$data = array(
+			'status' => "0"
+		);
+		$where = array('id_rembes' => $id_rembes);
+		$this->Mod_admin->update_claim($where, $data, 'tbl_form_reimburstment');
+		$this->session->set_flashdata('notif', 'di batalkan', 'Success');
+		redirect('admin/claim');
+	}
+	
 	public function edit_claim($id_rembes)
 	{
 		$this->load->view('header');
@@ -531,6 +677,7 @@ class Admin extends CI_Controller
 		$where = array(
 			'id_rembes' => $this->input->post('id_rembes')
 		);
+		$id_rembes = $this->input->post('id_rembes');
 		$random_string = random_string('numeric',5);
 		$file_claim = $_FILES['file_claim']['name'];
 		if($this->form_validation->run() == FALSE){
@@ -540,10 +687,11 @@ class Admin extends CI_Controller
 				'id_project' => $this->input->post('nama_paket'),
 				'file_rembes' => $random_string.$file_claim
 			);
-			$this->load->view('header');
 			$data['project'] = $this->Mod_admin->get_project()->result();
-			$this->load->view('admin/claim_kerja/tambah_claim', $data);
-			$this->load->view('footer');
+			$this->edit_claim($id_rembes);
+			// $this->load->view('header');
+			// $this->load->view('admin/claim_kerja/edit_claim/'.$id_rembes, $data);
+			// $this->load->view('footer');
 		}else{
 		// Jika file tidak di upload, maka masukkan nominal sama keterangan
 			if (empty($_FILES['file_claim']['name'])){
@@ -553,9 +701,18 @@ class Admin extends CI_Controller
 					'id_project' => $this->input->post('nama_paket'),
 					'status' => "0"
 				);
+				$this->session->set_flashdata('notif', 'di update', 'Success');
 				$this->Mod_admin->update_claim($where, $data, 'tbl_form_reimburstment');
 				redirect('admin/claim');
+			// Jika file diupload
 			}else{
+				$data = array(
+					'keterangan' => $this->input->post('keterangan'),
+					'nominal' => $this->input->post('nominal_claim'),
+					'id_project' => $this->input->post('nama_paket'),
+					'status' => "0",
+					'file_rembes' => $random_string.$file_claim
+				);
 				//Upload
 				$config['upload_path']          = 'assets/upload/claim';
 				$config['allowed_types']        = 'gif|jpg|jpeg|pdf|png';
@@ -563,11 +720,12 @@ class Admin extends CI_Controller
 				$config['file_name'] 			= $random_string.$file_claim;
 				$this->load->library('upload',$config);
 						if($this->upload->do_upload('file_claim')){
-							$this->session->set_flashdata('notif_claim', 'disubmit', 'Success');
-							$this->db->insert('tbl_form_reimburstment', $data_claim);
+							
+							$this->session->set_flashdata('notif', 'di update', 'Success');
+							$this->Mod_admin->update_claim($where, $data, 'tbl_form_reimburstment');
 							redirect('admin/claim');
 						}else{
-							$this->session->set_flashdata('notif_claim', $this->upload->display_errors(), 'fail');
+							$this->session->set_flashdata('notif', $this->upload->display_errors(), 'fail');
 							$error = array('error' => $this->upload->display_errors());
 
 							print_r($error);

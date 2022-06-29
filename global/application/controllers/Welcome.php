@@ -5,6 +5,8 @@ class Welcome extends CI_Controller {
 	function __construct(){
 		parent::__construct();		
 		$this->load->model('mod_login');
+		$this->load->model('Mod_admin');
+
  
 	}
 
@@ -30,8 +32,7 @@ class Welcome extends CI_Controller {
 				$level_user = $d->level_user;
 				$bulan_tahun = $d->bulan_tahun;
 				$sisa_cuti = $d->sisa_cuti;
-			}
-	
+			}		
 		$cek = $this->mod_login->cek_login("tbl_user",$where)->num_rows();
 		if($cek > 0){
 			$data_session = array(
@@ -45,6 +46,22 @@ class Welcome extends CI_Controller {
 				'sisa_cuti' => $sisa_cuti
 				);
 			$this->session->set_userdata($data_session);
+
+			// cek hak cuti
+			$where_id_user = array(
+				'id_user' => $id_user
+				);
+			$cek_cuti = $this->Mod_admin->cek_cuti_terakhir("tbl_form_cuti",$where_id_user)->num_rows();
+ 			$hari_ini=date('Y-m-d');
+			$berhak_cuti=date('Y-m-d', strtotime('+1 year', strtotime($bulan_tahun)));
+			if ($hari_ini >= $berhak_cuti && $cek_cuti == 0){
+				$data = array(
+					'sisa_cuti' => "12");
+				$where = array(
+					'id_user' => $id_user
+				);
+				$this->Mod_admin->update_user($where, $data, 'tbl_user');
+			}
 			redirect(base_url("admin"));
  
 		}else{

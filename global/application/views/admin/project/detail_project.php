@@ -39,19 +39,24 @@
             <div class="row">
               <div class="col-12">
                 <h4>Recent Activity</h4>
+                <?php foreach ($riwayat as $r): ?>
                 <div class="post">
                   <div class="user-block">
                     <img class="img-circle img-bordered-sm" src="<?php echo base_url() ?>assets/dist/img/user2-160x160.jpg" alt="user image">
                     <span class="username">
-                      <a href="#">Moch Khaidar Elhaq</a>
+                      <?php echo $r->nama?>
                     </span>
-                    <span class="description">7:45 PM</span>
+                    <span class="description"><?php echo $r->update_date?></span>
                   </div>
                   <!-- /.user-block -->
                   <p>
-                    Melakukan pengecekan device
+                  <?php echo $r->keterangan?>
                   </p>
+                  <div>
+                    <a href="<?php echo base_url().'admin/delete_history/'.$r->id_project.'/'.$r->id_aktivitas?>"><i class="far fa-trash-alt"></i></a>
+                  </div>
                 </div>
+                <?php endforeach ?>
               </div>
             </div>
           </div>
