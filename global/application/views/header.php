@@ -98,6 +98,7 @@
                 </p>
               </a>
             </li>
+            <?php if($this->session->userdata('level_user') == '4' || $this->session->userdata('level_user') == '5' || $this->session->userdata('level_user') == '6'){ ?>
             <li class="nav-item">
               <a href="<?php echo base_url() ?>admin/project" class="nav-link">
                 <i class="nav-icon fa fa-file"></i>
@@ -106,6 +107,8 @@
                 </p>
               </a>
             </li>
+            <?php } ?>
+            <?php if($this->session->userdata('level_user') != '3' || $this->session->userdata('level_user') != '5'){ ?>
             <li class="nav-item">
               <a href="<?php echo base_url() ?>admin/claim" class="nav-link">
                 <i class="nav-icon fa fa-plane"></i>
@@ -114,6 +117,7 @@
                 </p>
               </a>
             </li>
+            <?php } ?>
             <li class="nav-item">
               <a href="<?php echo base_url()?>admin/form_cuti" class="nav-link">
                 <i class="nav-icon fa fa-calendar"></i>
@@ -122,6 +126,7 @@
                 </p>
               </a>
             </li>
+            <?php if($this->session->userdata('level_user') == '2'){ ?>
             <li class="nav-header">Data Karyawan</li>
             <li class="nav-item">
               <a href="<?php echo base_url() ?>admin/data_karyawan" class="nav-link">
@@ -130,24 +135,31 @@
                   Data Karyawan
                 </p>
               </a>
+            <?php } ?>
             </li>
+            <?php if($this->session->userdata('level_user') == '2' || $this->session->userdata('level_user') == '3'){ ?>
             <li class="nav-header">Laporan</li>
+            <?php } ?>
+            <?php if($this->session->userdata('level_user') == '2'){ ?>
             <li class="nav-item">
-              <a href="<?php echo base_url() ?>welcome/logout" class="nav-link">
+              <a href="<?php echo base_url() ?>admin/laporan_cuti" class="nav-link">
                 <i class="nav-icon fas fa-book"></i>
                 <p>
                   Cuti
                 </p>
               </a>
             </li>
+            <?php };
+            if($this->session->userdata('level_user') == '3'){ ?>
             <li class="nav-item">
-              <a href="<?php echo base_url() ?>welcome/logout" class="nav-link">
+              <a href="<?php echo base_url() ?>admin/laporan_reimburstment" class="nav-link">
                 <i class="nav-icon fas fa-book"></i>
                 <p>
                 Reimburstment
                 </p>
               </a>
             </li>
+            <?php }?>
             <li class="nav-header">Ganti Akun</li>
             <li class="nav-item">
               <a href="<?php echo base_url() ?>welcome/logout" class="nav-link">

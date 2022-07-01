@@ -52,9 +52,11 @@
                   <p>
                   <?php echo $r->keterangan?>
                   </p>
+                  <?php if($this->session->userdata('id_user') == $r->id_user){ ?>
                   <div>
                     <a href="<?php echo base_url().'admin/delete_history/'.$r->id_project.'/'.$r->id_aktivitas?>"><i class="far fa-trash-alt"></i></a>
                   </div>
+                  <?php }?>
                 </div>
                 <?php endforeach ?>
               </div>
@@ -67,9 +69,6 @@
             <div class="text-muted">
               <p class="text-sm">Pemberi Pekerjaan / Client
                 <b class="d-block"><?php echo $project->nama_ppk ?></b>
-              </p>
-              <p class="text-sm">Project Manager
-                <b class="d-block">Tony Chicken</b>
               </p>
             </div>
 
@@ -107,6 +106,7 @@
             </div>
           </div>
         </div>
+        <?php if($this->session->userdata('level_user') == '4' || $this->session->userdata('level_user') == '6'){ ?>
         <div class="row">
         	<div class="col-12">
         		<form action="<?php echo base_url('admin/add_aktivitas_project/'.$this->uri->segment('3'))?>" method="POST">
@@ -120,7 +120,7 @@
               </form>
         	</div>
         </div>
-        
+        <?php }?>
         <a href="<?php echo base_url()?>admin/project" class="btn btn-primary"><i
         		class="fas fa-arrow-left"></i>Kembali</a>
 

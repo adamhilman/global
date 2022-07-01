@@ -743,11 +743,81 @@ class Admin extends CI_Controller
 		redirect('admin/claim');
 	}
 
+	public function laporan_cuti()
+	{
+
+		$this->load->view('header');
+		$this->load->view('admin/laporan/cuti');
+		$this->load->view('footer');
+	}
+
+	public function laporan_cuti_pdf()
+	{
+		$bulan = $this->input->post('bulan');
+		$tahun = $this->input->post('tahun');
+		// panggil library yang kita buat sebelumnya yang bernama pdfgenerator
+		$this->load->library('pdfgenerator');
+
+		// $this->data['title_pdf'] = 'Laporan Rekapitulasi Cuti'.$bulan.'-'.$tahun;
+
+		$data = array(
+			'title_pdf' => 'Laporan Rekapitulasi Cuti-'.$bulan.'-'.$tahun,
+			'bulan' => $bulan,
+			'tahun' => $tahun
+		);
+		// filename dari pdf ketika didownload
+		$file_pdf = 'Laporan Rekapitulasi Cuti-'.$bulan.'-'.$tahun;
+		// setting paper
+		$paper = 'A4';
+		//orientasi paper potrait / landscape
+		$orientation = "landscape";
+		$data['laporan'] = $this->Mod_admin->get_laporan_cuti($bulan,$tahun)->result();
+		$html = $this->load->view('admin/laporan/cutipdf', $data, TRUE);
+
+		// run dompdf
+		$this->pdfgenerator->generate($html, $file_pdf, $paper, $orientation);
+		
+	}
+
+	public function laporan_reimburstment()
+	{
+
+		$this->load->view('header');
+		$this->load->view('admin/laporan/reimburstment');
+		$this->load->view('footer');
+	}
+
+	public function laporan_reimburstment_pdf()
+	{
+		$bulan = $this->input->post('bulan');
+		$tahun = $this->input->post('tahun');
+		// panggil library yang kita buat sebelumnya yang bernama pdfgenerator
+		$this->load->library('pdfgenerator');
+
+		$data = array(
+			'title_pdf' => 'Laporan Rekapitulasi Reimburstment-'.$bulan.'-'.$tahun,
+			'bulan' => $bulan,
+			'tahun' => $tahun
+		);
+		// filename dari pdf ketika didownload
+		$file_pdf = 'Laporan Rekapitulasi Reimburstment-'.$bulan.'-'.$tahun;
+		// setting paper
+		$paper = 'A4';
+		//orientasi paper potrait / landscape
+		$orientation = "landscape";
+		$data['laporan'] = $this->Mod_admin->get_laporan_reimburstment($bulan,$tahun)->result();
+		$html = $this->load->view('admin/laporan/reimburstmentpdf', $data, TRUE);
+
+		// run dompdf
+		$this->pdfgenerator->generate($html, $file_pdf, $paper, $orientation);
+		
+	}
+
 	public function laporan_pdf()
 	{
 
 		// panggil library yang kita buat sebelumnya yang bernama pdfgenerator
-		$this->load->library('pdf');
+		$this->load->library('pdfgenerator');
 
 		// title dari pdf
 		$this->data['title_pdf'] = 'Laporan Penjualan Toko Kita';

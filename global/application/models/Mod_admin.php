@@ -133,11 +133,19 @@ Class Mod_admin extends CI_Model{
         $this->db->delete($table);
     }
 
-    function get_surat_masuk(){
-        $this->db->from('surat_masuk');
-        $this->db->where('arsip', '0');
-        $this->db->order_by('id_surat_masuk','DESC');
-        return $this->db->get();
+    function get_laporan_cuti($bulan,$tahun){
+        return $this->db->query("SELECT CONCAT(tbl_user.level_user,tbl_user.bulan_tahun,tbl_user.id_user) as ID, tbl_form_cuti.*, tbl_user.nama, tbl_user.level_user FROM tbl_form_cuti LEFT JOIN tbl_user on tbl_form_cuti.id_user = tbl_user.id_user WHERE MONTH(tbl_form_cuti.tanggal_mulai) = $bulan and YEAR(tbl_form_cuti.tanggal_mulai) = $tahun");
     }
+
+    function get_laporan_reimburstment($bulan,$tahun){
+        return $this->db->query("SELECT tbl_form_reimburstment.*, tbl_project.nama_paket, tbl_user.nama FROM tbl_form_reimburstment LEFT JOIN tbl_project on tbl_form_reimburstment.id_project = tbl_project.id_project LEFT JOIN tbl_user on tbl_form_reimburstment.id_user = tbl_user.id_user where MONTH(tbl_form_reimburstment.tanggal_pengajuan) = $bulan and YEAR(tbl_form_reimburstment.tanggal_pengajuan) = $tahun");
+    }
+
+    // function get_surat_masuk(){
+    //     $this->db->from('surat_masuk');
+    //     $this->db->where('arsip', '0');
+    //     $this->db->order_by('id_surat_masuk','DESC');
+    //     return $this->db->get();
+    // }
 }
 ?>

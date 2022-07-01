@@ -93,6 +93,7 @@
             <!-- /.card-body -->
         </div>
         <!-- /.card -->
+        <?php if($this->session->userdata('level_user') == '4'){ ?>
         <!-- PM -->
         <div class="card">
             <div class="card-header">
@@ -152,6 +153,8 @@
             </div>
             <!-- /.card-body -->
         </div>
+        <?php };
+        if($this->session->userdata('level_user') == '2'){ ?>
         <!-- HRD -->
         <div class="card">
             <div class="card-header">
@@ -218,6 +221,7 @@
             </div>
             <!-- /.card-body -->
         </div>
+        <?php }?>
     </section>
     <!-- /.content -->
 </div>

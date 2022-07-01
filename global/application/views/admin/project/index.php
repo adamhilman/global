@@ -27,11 +27,13 @@
                     <div class="col-md-10">
                         <h3 class="card-title">Projects</h3>
                     </div>
+                    <?php if($this->session->userdata('level_user') == '5' || $this->session->userdata('level_user') == '4'){ ?>
                     <div class="col-md-2">
                         <a href="<?php echo base_url()?>admin/tambah_project">
                         <button type="button" class="btn btn-block btn-primary btn-xs">Tambah Data</button>
                         </a>
                     </div>
+                    <?php }?>
                 </div>
 
             </div>
@@ -64,8 +66,10 @@
                                           </td>
                                           <td><?php echo $p->nama_ppk?></td>
                                           <td><a href="<?php echo base_url().'admin/detail_project/'.$p->id_project?>"><i class="fas fa-eye"></i></a>
+                                          <?php if($this->session->userdata('level_user') == '5' || $this->session->userdata('level_user') == '4'){ ?>
                                           <a href="<?php echo base_url().'admin/edit_project/'.$p->id_project?>"><i class="fas fa-edit"></i></a>
                                           <a href="#" class="remove"><i class="fas fa-trash"></i></a>
+                                          <?php }?>
                                         </td>
                                       </tr>
                                       <?php endforeach; ?>

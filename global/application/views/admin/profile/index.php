@@ -26,8 +26,13 @@
  					<!-- Profile Image -->
  					<div class="card card-primary card-outline">
  						<div class="card-body box-profile">
-
- 							<h3 class="profile-username text-center"><?php echo $this->session->userdata('nama'); ?></h3>
+ 							<h3 class="profile-username text-center"><?php echo $this->session->userdata('nama'); ?> - 
+							<?php
+							$level = $this->session->userdata('level_user');
+							$userid = $this->session->userdata('id_user');
+							$thn_masuk = $this->session->userdata('bulan_tahun');
+							$kode_tahun = str_replace('-','',$thn_masuk);
+							echo $level.$kode_tahun.$userid;?></h3>
 
  							<p class="text-muted text-center">
 								 <?php if ($level_user == "1"){
