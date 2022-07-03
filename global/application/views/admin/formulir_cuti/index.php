@@ -45,7 +45,9 @@
                                           <th>Jumlah Hari</th>
                                           <th>Keterangan</th>
                                           <th>Tanggal Cuti</th>
+                                          <?php if ($this->session->userdata('level_user') == 6){?>
                                           <th>Approval Proyek Manajer</th>
+                                          <?php } ?>
                                           <th>Approval Direktur</th>
                                           <th>Aksi</th>
                                       </tr>
@@ -57,6 +59,7 @@
                                         <td><?php echo $c->jumlah_hari;?></td>
                                         <td><?php echo $c->keterangan;?></td>
                                         <td><?php echo $c->tanggal_mulai;?> - <?php echo $c->tanggal_selesai;?></td>
+                                        <?php if ($this->session->userdata('level_user') == 6){?>
                                         <td>
                                             <?php if ($c->approval_pm == 0){
                                                 echo '<i class="fas fa-hourglass-half"></i> Menunggu disetujui';
@@ -64,6 +67,8 @@
                                                 echo '<i class="fas fa-check"></i> Telah disetujui';
                                             }else{echo "Error";};?>
                                         </td>
+                                        <?php } ?>
+
                                         <td>
                                             <?php if ($c->approval_direksi == 0){
                                                 echo '<i class="fas fa-hourglass-half"></i> Menunggu disetujui';

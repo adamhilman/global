@@ -18,6 +18,9 @@ Class Mod_admin extends CI_Model{
     function get_cuti_all(){
         return $this->db->query("select tbl_form_cuti.*,tbl_user.nama FROM tbl_form_cuti LEFT JOIN tbl_user ON tbl_form_cuti.id_user = tbl_user.id_user");
     }
+    function get_cuti_email($id_cuti){
+        return $this->db->query("select tbl_form_cuti.*,tbl_user.nama, tbl_user.email FROM tbl_form_cuti LEFT JOIN tbl_user ON tbl_form_cuti.id_user = tbl_user.id_user where tbl_form_cuti.id_cuti = $id_cuti");
+    }
 
     function get_cuti_all_teknisi(){
         return $this->db->query("select tbl_form_cuti.*, tbl_user.level_user FROM tbl_form_cuti LEFT JOIN tbl_user ON tbl_form_cuti.id_user = tbl_user.id_user where tbl_user.level_user = 6");
@@ -118,6 +121,10 @@ Class Mod_admin extends CI_Model{
     function get_claim_all(){
         return $this->db->query("SELECT tbl_form_reimburstment.*, tbl_project.nama_paket, tbl_user.nama FROM tbl_form_reimburstment LEFT JOIN tbl_project on tbl_form_reimburstment.id_project = tbl_project.id_project LEFT JOIN tbl_user on tbl_form_reimburstment.id_user = tbl_user.id_user order by status");
     }
+
+    function get_rembes_email($id_rembes){
+        return $this->db->query("SELECT tbl_form_reimburstment.*, tbl_user.email, tbl_user.nama FROM tbl_form_reimburstment LEFT JOIN tbl_user on tbl_form_reimburstment.id_user = tbl_user.id_user WHERE tbl_form_reimburstment.id_rembes = $id_rembes");
+    }
     function detail_claim($id_rembes){
         $this->db->from('tbl_form_reimburstment');
         $this->db->where('id_rembes', $id_rembes);
@@ -134,7 +141,7 @@ Class Mod_admin extends CI_Model{
     }
 
     function get_laporan_cuti($bulan,$tahun){
-        return $this->db->query("SELECT CONCAT(tbl_user.level_user,tbl_user.bulan_tahun,tbl_user.id_user) as ID, tbl_form_cuti.*, tbl_user.nama, tbl_user.level_user FROM tbl_form_cuti LEFT JOIN tbl_user on tbl_form_cuti.id_user = tbl_user.id_user WHERE MONTH(tbl_form_cuti.tanggal_mulai) = $bulan and YEAR(tbl_form_cuti.tanggal_mulai) = $tahun");
+        return $this->db->query("SELECT CONCAT(tbl_user.level_user,tbl_user.bulan_tahun,tbl_user.id_user) as ID, tbl_form_cuti.*, tbl_user.nama, tbl_user.level_user FROM tbl_form_cuti LEFT JOIN tbl_user on tbl_form_cuti.id_user = tbl_user.id_user WHERE MONTH(tbl_form_cuti.tanggal_mulai) = $bulan and YEAR(tbl_form_cuti.tanggal_mulai) = $tahun AND tbl_form_cuti.approval_direksi = 1");
     }
 
     function get_laporan_reimburstment($bulan,$tahun){

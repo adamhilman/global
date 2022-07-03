@@ -16,7 +16,7 @@
  			</div>
  		</div><!-- /.container-fluid -->
  	</section>
-
+	 <div class="flash-data" data-flashdata="<?= $this->session->flashdata('notif'); ?>"></div>
  	<!-- Main content -->
  	<section class="content">
  		<div class="container-fluid">

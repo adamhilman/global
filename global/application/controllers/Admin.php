@@ -118,6 +118,7 @@ class Admin extends CI_Controller
 				'confirm_password' => NULL,
 				'bulan_tahun' =>  $this->session->userdata('bulan_tahun')
 			);
+			$this->session->set_flashdata('notif', 'di update', 'Success');
 		} else {
 			// Save data submit gagal kalau gak pake password
 			$data = array(
@@ -159,7 +160,8 @@ class Admin extends CI_Controller
 
 
             //Create Message
-            $this->session->set_flashdata('user_saved', 'User has been saved');
+            // $this->session->set_flashdata('user_saved', 'User has been saved');
+			$this->session->set_flashdata('notif', 'di update', 'Success');
 			$login_user = $this->db->get_where('tbl_user',array('id_user'=> $id))->result();
 			foreach($login_user as $d){
 				$nama = $d->nama;
@@ -435,6 +437,37 @@ class Admin extends CI_Controller
 		);
 		$where = array('id_cuti' => $id_cuti);
 		$this->Mod_admin->update_cuti($where, $data, 'tbl_form_cuti');
+
+		// Kirim notif Email
+		$this->load->config('email');
+        $this->load->library('email');
+		// Ambil email dari database
+		$email_notif = $this->Mod_admin->get_cuti_email($id_cuti)->result();
+		foreach($email_notif as $d){
+				$nama = $d->nama;
+				$email = $d->email;
+				$keterangan = $d->keterangan;
+				$tanggal_mulai = $d->tanggal_mulai;
+				$tanggal_selesai = $d->tanggal_selesai;
+			}
+		//Kirim
+        $from = "noreply@global-integrasi.co.id";
+        $to = $email;
+        $subject = "Approval Cuti Karyawan Atas Nama ".$nama;
+        $message = "Selamat formulir cuti anda dengan tanggal mulai ".$tanggal_mulai." sampai dengan ".$tanggal_selesai." telah disetujui.";
+
+        $this->email->set_newline("\r\n");
+        $this->email->from($from);
+        $this->email->to($to);
+        $this->email->subject($subject);
+        $this->email->message($message);
+
+        if ($this->email->send()) {
+            // echo 'Your Email has successfully been sent.';
+        } else {
+            show_error($this->email->print_debugger());
+        }
+
 		$this->session->set_flashdata('notif', 'di setujui', 'Success');
 		redirect('admin/form_cuti');
 	}
@@ -447,6 +480,35 @@ class Admin extends CI_Controller
 		
 		$where = array('id_cuti' => $id_cuti);
 		$this->Mod_admin->update_cuti($where, $data, 'tbl_form_cuti');
+		// Kirim notif Email
+		$this->load->config('email');
+        $this->load->library('email');
+		// Ambil email dari database
+		$email_notif = $this->Mod_admin->get_cuti_email($id_cuti)->result();
+		foreach($email_notif as $d){
+				$nama = $d->nama;
+				$email = $d->email;
+				$keterangan = $d->keterangan;
+				$tanggal_mulai = $d->tanggal_mulai;
+				$tanggal_selesai = $d->tanggal_selesai;
+			}
+		//Kirim
+        $from = "noreply@global-integrasi.co.id";
+        $to = $email;
+        $subject = "Ammend Cuti Karyawan Atas Nama ".$nama;
+        $message = "Mohon Maaf, formulir cuti anda dengan tanggal mulai ".$tanggal_mulai." sampai dengan ".$tanggal_selesai." telah dibatalkan.";
+
+        $this->email->set_newline("\r\n");
+        $this->email->from($from);
+        $this->email->to($to);
+        $this->email->subject($subject);
+        $this->email->message($message);
+
+        if ($this->email->send()) {
+            // echo 'Your Email has successfully been sent.';
+        } else {
+            show_error($this->email->print_debugger());
+        }
 		$this->session->set_flashdata('notif', 'di batalkan', 'Success');
 		redirect('admin/form_cuti');
 	}
@@ -473,15 +535,15 @@ class Admin extends CI_Controller
 				'keterangan' => $this->input->post('keterangan'),
 				'jumlah_hari' => $jumlah_hari,
 				'id_user' => $this->session->userdata('id_user')
+			);}else{
+			$data = array(
+				'tanggal_mulai' => $this->input->post('tanggal_mulai'),
+				'tanggal_selesai' => $this->input->post('tanggal_selesai'),
+				'keterangan' => $this->input->post('keterangan'),
+				'jumlah_hari' => $jumlah_hari,
+				'id_user' => $this->session->userdata('id_user'),
+				'approval_pm' => "1",
 			);}
-		$data = array(
-			'tanggal_mulai' => $this->input->post('tanggal_mulai'),
-			'tanggal_selesai' => $this->input->post('tanggal_selesai'),
-			'keterangan' => $this->input->post('keterangan'),
-			'jumlah_hari' => $jumlah_hari,
-			'id_user' => $this->session->userdata('id_user'),
-			'approval_pm' => "1",
-		);
 		$data_user = array(
 			'sisa_cuti' => $hasil_sisa
 		);
@@ -645,6 +707,40 @@ class Admin extends CI_Controller
 		);
 		$where = array('id_rembes' => $id_rembes);
 		$this->Mod_admin->update_claim($where, $data, 'tbl_form_reimburstment');
+		// Kirim notif Email
+		$this->load->config('email');
+        $this->load->library('email');
+		// Ambil email dari database
+		$email_notif = $this->Mod_admin->get_rembes_email($id_rembes)->result();
+		foreach($email_notif as $d){
+				$nama = $d->nama;
+				$email = $d->email;
+				$keterangan = $d->keterangan;
+				$nominal = $d->nominal;
+				$tanggal_pengajuan = $d->tanggal_pengajuan;
+			}
+		function rupiah($angka){
+			$hasil_rupiah = "Rp " . number_format($angka,0,',','.');
+			return $hasil_rupiah;
+			};
+		$nominal_convert = rupiah($nominal);
+		//Kirim
+        $from = "noreply@global-integrasi.co.id";
+        $to = $email;
+        $subject = "Approval Claim Karyawan Atas Nama ".$nama;
+        $message = "Selamat claim kunjungan kerja anda dengan tanggal pengajuan ".$tanggal_pengajuan." dengan nominal sejumlah : ".$nominal_convert." telah disetujui.";
+
+        $this->email->set_newline("\r\n");
+        $this->email->from($from);
+        $this->email->to($to);
+        $this->email->subject($subject);
+        $this->email->message($message);
+
+        if ($this->email->send()) {
+            // echo 'Your Email has successfully been sent.';
+        } else {
+            show_error($this->email->print_debugger());
+        }
 		$this->session->set_flashdata('notif', 'di setujui', 'Success');
 		redirect('admin/claim');
 	}
@@ -656,6 +752,40 @@ class Admin extends CI_Controller
 		);
 		$where = array('id_rembes' => $id_rembes);
 		$this->Mod_admin->update_claim($where, $data, 'tbl_form_reimburstment');
+		// Kirim notif Email
+		$this->load->config('email');
+        $this->load->library('email');
+		// Ambil email dari database
+		$email_notif = $this->Mod_admin->get_rembes_email($id_rembes)->result();
+		foreach($email_notif as $d){
+				$nama = $d->nama;
+				$email = $d->email;
+				$keterangan = $d->keterangan;
+				$nominal = $d->nominal;
+				$tanggal_pengajuan = $d->tanggal_pengajuan;
+			}
+		function rupiah($angka){
+			$hasil_rupiah = "Rp " . number_format($angka,0,',','.');
+			return $hasil_rupiah;
+			};
+		$nominal_convert = rupiah($nominal);
+		//Kirim
+        $from = "noreply@global-integrasi.co.id";
+        $to = $email;
+        $subject = "Ammend Claim Karyawan Atas Nama ".$nama;
+        $message = "Mohon maaf, claim kunjungan kerja anda dengan tanggal pengajuan ".$tanggal_pengajuan." dengan nominal sejumlah : ".$nominal_convert." telah dibatalkan.";
+
+        $this->email->set_newline("\r\n");
+        $this->email->from($from);
+        $this->email->to($to);
+        $this->email->subject($subject);
+        $this->email->message($message);
+
+        if ($this->email->send()) {
+            // echo 'Your Email has successfully been sent.';
+        } else {
+            show_error($this->email->print_debugger());
+        }
 		$this->session->set_flashdata('notif', 'di batalkan', 'Success');
 		redirect('admin/claim');
 	}
