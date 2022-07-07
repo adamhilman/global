@@ -31,7 +31,8 @@
 							$level = $this->session->userdata('level_user');
 							$userid = $this->session->userdata('id_user');
 							$thn_masuk = $this->session->userdata('bulan_tahun');
-							$kode_tahun = str_replace('-','',$thn_masuk);
+							$convert_tahun = str_replace('-','',$thn_masuk);
+							$kode_tahun = substr($convert_tahun,0,5);
 							echo $level.$kode_tahun.$userid;?></h3>
 
  							<p class="text-muted text-center">

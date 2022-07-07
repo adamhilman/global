@@ -41,7 +41,11 @@
                         $no = 1;
                         foreach ($laporan as $l ) :
 							$id_awal = $l->ID;
-							$id_karyawan = str_replace('-','',$id_awal);?>
+							$convert_id = str_replace('-','',$id_awal);
+                            $awal = substr($convert_id,0,7);
+                            $akhir = substr($convert_id,-2);
+                            $id_karyawan = $awal.$akhir;
+                            ?>
                         <tr>
                             <td><?php echo $no?></td>
                             <td><?php echo $l->nama?> (<?php echo $id_karyawan?>)</td>
