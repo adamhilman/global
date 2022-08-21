@@ -48,7 +48,7 @@
                                           <?php if ($this->session->userdata('level_user') == 6){?>
                                           <th>Approval Proyek Manajer</th>
                                           <?php } ?>
-                                          <th>Approval Direktur</th>
+                                          <th>Approval HRD</th>
                                           <th>Aksi</th>
                                       </tr>
                                   </thead>
@@ -118,7 +118,7 @@
                                           <th>Keterangan</th>
                                           <th>Tanggal Cuti</th>
                                           <th>Approval Proyek Manajer</th>
-                                          <th>Approval Direktur</th>
+                                          <th>Approval HRD</th>
                                           <th>Aksi</th>
                                       </tr>
                                   </thead>
@@ -184,7 +184,7 @@
                                           <th>Keterangan</th>
                                           <th>Tanggal Cuti</th>
                                           <th>Approval Proyek Manajer</th>
-                                          <th>Approval Direktur</th>
+                                          <th>Approval HRD</th>
                                           <th>Aksi</th>
                                       </tr>
                                   </thead>
