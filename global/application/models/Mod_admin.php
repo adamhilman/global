@@ -23,7 +23,7 @@ Class Mod_admin extends CI_Model{
     }
 
     function get_cuti_all_teknisi(){
-        return $this->db->query("select tbl_form_cuti.*, tbl_user.level_user FROM tbl_form_cuti LEFT JOIN tbl_user ON tbl_form_cuti.id_user = tbl_user.id_user where tbl_user.level_user = 6");
+        return $this->db->query("select tbl_form_cuti.*, tbl_user.nama, tbl_user.level_user FROM tbl_form_cuti LEFT JOIN tbl_user ON tbl_form_cuti.id_user = tbl_user.id_user where tbl_user.level_user = 6");
     }
 
     function get_karyawan(){
